@@ -1,6 +1,6 @@
-# ST: Algorithmic Hypergraph Theory - Codding Project #
+# ST: Algorithmic Hypergraph Theory - Coding Project #
 
-This is the coding project for the *Algorithmic Hypergraph Theory* class, Kent Spring 2015. 
+This is the coding project for the *Algorithmic Hypergraph Theory* class, Kent, Spring 2015. 
 The task is to visualise a hypertree based on its underlying tree.
 
 ## Requirements ##
