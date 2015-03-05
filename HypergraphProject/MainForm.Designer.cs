@@ -49,6 +49,7 @@
             this.mnuMain = new System.Windows.Forms.MenuStrip();
             this.programToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.matrixControl1 = new HypergraphProject.Interface.MatrixControl();
             this.toolMain.SuspendLayout();
             this.mnuMain.SuspendLayout();
             this.SuspendLayout();
@@ -161,19 +162,19 @@
             // acyclicToolStripMenuItem
             // 
             this.acyclicToolStripMenuItem.Name = "acyclicToolStripMenuItem";
-            this.acyclicToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.acyclicToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.acyclicToolStripMenuItem.Text = "α-Acyclic";
             // 
             // hypertreeToolStripMenuItem
             // 
             this.hypertreeToolStripMenuItem.Name = "hypertreeToolStripMenuItem";
-            this.hypertreeToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.hypertreeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.hypertreeToolStripMenuItem.Text = "Hypertree";
             // 
             // arbitraryToolStripMenuItem
             // 
             this.arbitraryToolStripMenuItem.Name = "arbitraryToolStripMenuItem";
-            this.arbitraryToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
+            this.arbitraryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.arbitraryToolStripMenuItem.Text = "Arbitrary";
             // 
             // toolStripSeparator2
@@ -212,16 +213,26 @@
             this.infoToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.infoToolStripMenuItem.Text = "Info";
             // 
+            // matrixControl1
+            // 
+            this.matrixControl1.Dimension = new System.Drawing.Size(0, 0);
+            this.matrixControl1.Location = new System.Drawing.Point(12, 54);
+            this.matrixControl1.Name = "matrixControl1";
+            this.matrixControl1.Size = new System.Drawing.Size(150, 150);
+            this.matrixControl1.TabIndex = 2;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(780, 478);
+            this.Controls.Add(this.matrixControl1);
             this.Controls.Add(this.toolMain);
             this.Controls.Add(this.mnuMain);
             this.MainMenuStrip = this.mnuMain;
             this.Name = "MainForm";
             this.Text = "ST: Algorithmic Hypergraph Theory";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.toolMain.ResumeLayout(false);
             this.toolMain.PerformLayout();
             this.mnuMain.ResumeLayout(false);
@@ -253,6 +264,7 @@
         private System.Windows.Forms.MenuStrip mnuMain;
         private System.Windows.Forms.ToolStripMenuItem programToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
+        private Interface.MatrixControl matrixControl1;
     }
 }
 

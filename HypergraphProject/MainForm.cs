@@ -15,5 +15,10 @@ namespace HypergraphProject
         {
             InitializeComponent();
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            matrixControl1.Dimension = new Size(25, 15);
+        }
     }
 }
