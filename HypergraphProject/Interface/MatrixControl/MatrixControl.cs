@@ -17,7 +17,7 @@ namespace HypergraphProject.Interface
         private Size fieldSize = new Size(16, 16);
         private Size dimension;
 
-        private BitArray fields = new BitArray(0);
+        private BitMatrix matrix = new BitMatrix(0, 0);
 
         private Point mousCoord = new Point(-1, -1);
 
@@ -65,35 +65,20 @@ namespace HypergraphProject.Interface
 
         /// <summary>
         /// Returns or sets the value of a field.
-        /// If a coordinate is out of range, the property returns false.
         /// </summary>
         public bool this[int x, int y]
         {
             get
             {
-                if (x < 0 || Dimension.Width <= x || y < 0 || Dimension.Height <= y)
-                {
-                    return false;
-                }
-
-                int index = GetCoordinateIndex(x, y, Dimension.Width);
-
-                return fields[index];
+                return matrix[x, y];
             }
             set
             {
-                if (x < 0 || Dimension.Width <= x || y < 0 || Dimension.Height <= y)
-                {
-                    throw new ArgumentOutOfRangeException();
-                }
-
-                int index = GetCoordinateIndex(x, y, Dimension.Width);
-
-                bool oldVal = fields[index];
+                bool oldVal = matrix[x, y];
 
                 if (oldVal != value)
                 {
-                    fields[index] = value;
+                    matrix[x, y] = value;
                     OnFieldChanged(x, y, oldVal);
                 }
             }
@@ -288,20 +273,20 @@ namespace HypergraphProject.Interface
         protected void OnDimensionChanged(Size oldDim)
         {
             // Create new bit array
-            BitArray newFields = new BitArray(Dimension.Width * Dimension.Height);
+            BitMatrix newMatrix = new BitMatrix(Dimension.Width, Dimension.Height);
 
-            for (int x = 0; x < oldDim.Width; x++)
+            int maxX = Math.Min(oldDim.Width, Dimension.Width);
+            int maxY = Math.Min(oldDim.Height, Dimension.Height);
+
+            for (int x = 0; x < maxX; x++)
             {
-                for (int y = 0; y < oldDim.Height; y++)
+                for (int y = 0; y < maxY; y++)
                 {
-                    int oldIndex = GetCoordinateIndex(x, y, oldDim.Width);
-                    int newIndex = GetCoordinateIndex(x, y, Dimension.Width);
-
-                    newFields[newIndex] = fields[oldIndex];
+                    newMatrix[x, y] = matrix[x, y];
                 }
             }
 
-            fields = newFields;
+            matrix = newMatrix;
 
 
             //-----------
