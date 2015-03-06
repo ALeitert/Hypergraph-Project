@@ -20,5 +20,6 @@ namespace HypergraphProject
         {
             matrixControl.Dimension = new Size(25, 35);
         }
+
     }
 }

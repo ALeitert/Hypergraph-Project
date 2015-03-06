@@ -85,11 +85,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Interface\Icons\png\Dual.png" />
+    <Content Include="Interface\Icons\png\Edit.png" />
     <Content Include="Interface\Icons\png\Generate.png" />
     <Content Include="Interface\Icons\png\New.png" />
     <Content Include="Interface\Icons\png\Open.png" />
     <Content Include="Interface\Icons\png\Save.png" />
     <Content Include="Interface\Icons\svg\Dual.svg" />
+    <Content Include="Interface\Icons\svg\Edit.svg" />
     <Content Include="Interface\Icons\svg\Generate.svg" />
     <Content Include="Interface\Icons\svg\New.svg" />
     <Content Include="Interface\Icons\svg\Open.svg" />
