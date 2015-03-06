@@ -19,6 +19,9 @@ namespace HypergraphProject.Interface
 
         private BitArray fields = new BitArray(0);
 
+        private Point mousCoord = new Point(-1, -1);
+
+
         public MatrixControl()
         {
             InitializeComponent();
@@ -26,7 +29,10 @@ namespace HypergraphProject.Interface
             // Double buffered, to avoid flickering.
             this.DoubleBuffered = true;
 
+            Colors = new MatrixColors();
+
         }
+
 
         /// <summary>
         /// Returns or sets the size of the matrix.
@@ -94,13 +100,17 @@ namespace HypergraphProject.Interface
         }
 
         /// <summary>
+        /// Returns the set of colors for this matrix.
+        /// </summary>
+        public MatrixColors Colors { get; protected set; }
+
+        /// <summary>
         /// Calculates the index in an one dimensional array of the given coordinate.
         /// </summary>
         private int GetCoordinateIndex(int x, int y, int width)
         {
             return width * y + x;
         }
-
 
         private Point GuiToField(Point guiPt)
         {
@@ -110,8 +120,6 @@ namespace HypergraphProject.Interface
                 (guiPt.Y - 1) / fieldSize.Height
             );
         }
-
-        private Point mousCoord = new Point(-1, -1);
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -146,16 +154,23 @@ namespace HypergraphProject.Interface
             base.OnPaint(e);
 
             Graphics g = e.Graphics;
-
             g.Clear(this.BackColor);
 
 
             // ----------
 
+            EditMode matrixEditMode = EditMode.Fixed; // ToDo: Build proper matrix edit mode.
+
 
             if (mousCoord.X > 0 && mousCoord.Y > 0)
             {
                 Point fieldPt = GuiToField(mousCoord);
+
+                EditMode rowEditMode = EditMode.Fixed; // ToDo: Build proper matrix edit mode.
+                EditMode colEditMode = EditMode.Fixed; // ToDo: Build proper matrix edit mode.
+
+                Brush rowBrush = new SolidBrush(Colors[matrixEditMode, rowEditMode, true]);
+                Brush colBrush = new SolidBrush(Colors[matrixEditMode, colEditMode, true]);
 
                 Rectangle rowRec =
                     new Rectangle(
@@ -174,7 +189,18 @@ namespace HypergraphProject.Interface
                     );
 
 
-                g.FillRectangles(Brushes.LightYellow, new Rectangle[] { rowRec, colRec });
+                // Because row and column cross, there has to be a rule which color the field gets if both edit modes are different.
+                if (colEditMode > rowEditMode)
+                {
+                    g.FillRectangle(rowBrush, rowRec);
+                    g.FillRectangle(colBrush, colRec);
+                }
+                else
+                {
+                    g.FillRectangle(colBrush, colRec);
+                    g.FillRectangle(rowBrush, rowRec);
+                }
+
             }
 
 
@@ -182,9 +208,6 @@ namespace HypergraphProject.Interface
 
             // Preprocessing for strings
             Font font = new Font("Consolas", 10.0f);
-            Brush oneBrush = Brushes.Black;
-            Brush zeroBrush = Brushes.Gray;
-
             StringFormat strForm = new StringFormat();
             strForm.Alignment = StringAlignment.Center;
             strForm.LineAlignment = StringAlignment.Center;
@@ -194,38 +217,52 @@ namespace HypergraphProject.Interface
                 for (int y = 0; y < Dimension.Height; y++)
                 {
                     bool isOne = this[x, y];
+                    EditMode rowEditMode = EditMode.Fixed; // ToDo: Build proper matrix edit mode.
+                    EditMode colEditMode = EditMode.Fixed; // ToDo: Build proper matrix edit mode.
 
-                    if (isOne)
+                    EditMode fieldEM = (EditMode)Math.Max((int)rowEditMode, (int)colEditMode);
+
+                    Color bgColor = Colors[isOne, fieldEM, ColorFunction.Background];
+                    Color borderColor = Colors[isOne, fieldEM, ColorFunction.Border];
+                    Color textColor = Colors[isOne, fieldEM, ColorFunction.Text];
+
+                    Rectangle fieldRec =
+                        new Rectangle(
+                            fieldSize.Height * x + 1,
+                            fieldSize.Height * y + 1,
+                            fieldSize.Width - 1,
+                            fieldSize.Height - 1
+                        );
+
+                    if (bgColor != Color.Transparent)
                     {
-
-                        Rectangle fieldRec =
-                            new Rectangle(
-                                fieldSize.Height * x + 1,
-                                fieldSize.Height * y + 1,
-                                fieldSize.Width - 1,
-                                fieldSize.Height - 1
-                            );
-
-                        g.FillRectangle(Brushes.Yellow, fieldRec);
-                        g.DrawRectangle(Pens.Gold, fieldRec);
-
+                        g.FillRectangle(new SolidBrush(bgColor), fieldRec);
                     }
 
-                    g.DrawString(
-                        isOne ? "1" : "0",
-                        font,
-                        isOne ? oneBrush : zeroBrush,
-                        new RectangleF(
-                        // + 1 because of the frame.
-                            fieldSize.Width * x + 1,
-                            fieldSize.Height * y + 2,
-                            fieldSize.Width,
-                            fieldSize.Height
-                        ),
-                        strForm
-                    );
-                }
-            }
+                    if (borderColor != Color.Transparent)
+                    {
+                        g.DrawRectangle(new Pen(borderColor, 1F), fieldRec);
+                    }
+
+                    if (textColor != Color.Transparent)
+                    {
+                        g.DrawString(
+                            isOne ? "1" : "0",
+                            font,
+                            new SolidBrush(textColor),
+                            new RectangleF(
+                                // + 1 because of the frame.
+                                fieldSize.Width * x + 1,
+                                fieldSize.Height * y + 2,
+                                fieldSize.Width,
+                                fieldSize.Height
+                            ),
+                            strForm
+                        );
+                    }
+
+                } // for x
+            } // for y
 
 
             // ----------

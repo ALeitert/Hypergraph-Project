@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace HypergraphProject.Interface
 {
-    class MatrixColors
+    public class MatrixColors
     {
 
         private Color[, ,] fieldColorSet;
@@ -26,8 +26,8 @@ namespace HypergraphProject.Interface
             // ----------
             // 1 - Fixed
 
-            this[true, EditMode.Fixed, ColorFunction.Background] = Color.FromArgb(0x8DB3E2);
-            this[true, EditMode.Fixed, ColorFunction.Border] = Color.FromArgb(0x1F497D);
+            this[true, EditMode.Fixed, ColorFunction.Background] = Color.FromArgb(0xC6, 0xD9, 0xF0);
+            this[true, EditMode.Fixed, ColorFunction.Border] = Color.FromArgb(0x1F, 0x49, 0x7D);
             this[true, EditMode.Fixed, ColorFunction.Text] = Color.Black;
 
 

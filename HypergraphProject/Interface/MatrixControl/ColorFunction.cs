@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HypergraphProject.Interface
 {
-    enum ColorFunction : int
+    public enum ColorFunction : int
     {
         Background = 0,
         Border = 1,
