@@ -43,10 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interface\MatrixControl.cs">
+    <Compile Include="Interface\MatrixControl\ColorFunction.cs" />
+    <Compile Include="Interface\MatrixControl\EditMode.cs" />
+    <Compile Include="Interface\MatrixControl\MatrixColors.cs" />
+    <Compile Include="Interface\MatrixControl\MatrixControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Interface\MatrixControl.Designer.cs">
+    <Compile Include="Interface\MatrixControl\MatrixControl.Designer.cs">
       <DependentUpon>MatrixControl.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
@@ -57,7 +60,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Interface\MatrixControl.resx">
+    <EmbeddedResource Include="Interface\MatrixControl\MatrixControl.resx">
       <DependentUpon>MatrixControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
