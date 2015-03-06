@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.toolMain = new System.Windows.Forms.ToolStrip();
             this.btnNew = new System.Windows.Forms.ToolStripButton();
             this.btnOpen = new System.Windows.Forms.ToolStripButton();
@@ -49,14 +48,16 @@
             this.mnuMain = new System.Windows.Forms.MenuStrip();
             this.programToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.matrixControl1 = new HypergraphProject.Interface.MatrixControl();
+            this.matrixControl = new HypergraphProject.Interface.MatrixControl();
+            this.pnlMatrixContainer = new System.Windows.Forms.Panel();
             this.toolMain.SuspendLayout();
             this.mnuMain.SuspendLayout();
+            this.pnlMatrixContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolMain
             // 
-            this.toolMain.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolMain.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.toolMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnNew,
             this.btnOpen,
@@ -74,121 +75,116 @@
             this.toolMain.Location = new System.Drawing.Point(0, 24);
             this.toolMain.Name = "toolMain";
             this.toolMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolMain.Size = new System.Drawing.Size(780, 27);
+            this.toolMain.Size = new System.Drawing.Size(780, 29);
             this.toolMain.TabIndex = 0;
             this.toolMain.Text = "toolStrip1";
             // 
             // btnNew
             // 
-            this.btnNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnNew.Image = ((System.Drawing.Image)(resources.GetObject("btnNew.Image")));
+            this.btnNew.Image = global::HypergraphProject.Properties.Resources.New;
             this.btnNew.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(24, 24);
+            this.btnNew.Size = new System.Drawing.Size(57, 26);
             this.btnNew.Text = "New";
             // 
             // btnOpen
             // 
-            this.btnOpen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnOpen.Image = ((System.Drawing.Image)(resources.GetObject("btnOpen.Image")));
+            this.btnOpen.Image = global::HypergraphProject.Properties.Resources.Open;
             this.btnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(24, 24);
+            this.btnOpen.Size = new System.Drawing.Size(62, 26);
             this.btnOpen.Text = "Open";
             // 
             // btnSave
             // 
-            this.btnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnSave.Image = ((System.Drawing.Image)(resources.GetObject("btnSave.Image")));
+            this.btnSave.Image = global::HypergraphProject.Properties.Resources.Save;
             this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(24, 24);
+            this.btnSave.Size = new System.Drawing.Size(57, 26);
             this.btnSave.Text = "Save";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 29);
             // 
             // lblVertexNo
             // 
             this.lblVertexNo.Name = "lblVertexNo";
-            this.lblVertexNo.Size = new System.Drawing.Size(51, 24);
+            this.lblVertexNo.Size = new System.Drawing.Size(51, 26);
             this.lblVertexNo.Text = "Vertices:";
             // 
             // txtVertexNo
             // 
             this.txtVertexNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtVertexNo.Name = "txtVertexNo";
-            this.txtVertexNo.Size = new System.Drawing.Size(50, 27);
+            this.txtVertexNo.Size = new System.Drawing.Size(50, 29);
             // 
             // lblEdgeNo
             // 
             this.lblEdgeNo.Name = "lblEdgeNo";
-            this.lblEdgeNo.Size = new System.Drawing.Size(44, 24);
+            this.lblEdgeNo.Size = new System.Drawing.Size(44, 26);
             this.lblEdgeNo.Text = " Edges:";
             // 
             // txtEdgeNo
             // 
             this.txtEdgeNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtEdgeNo.Name = "txtEdgeNo";
-            this.txtEdgeNo.Size = new System.Drawing.Size(50, 27);
+            this.txtEdgeNo.Size = new System.Drawing.Size(50, 29);
             // 
             // lblMaxCardinality
             // 
             this.lblMaxCardinality.Name = "lblMaxCardinality";
-            this.lblMaxCardinality.Size = new System.Drawing.Size(69, 24);
+            this.lblMaxCardinality.Size = new System.Drawing.Size(69, 26);
             this.lblMaxCardinality.Text = " Max. Card.:";
             // 
             // txtMaxCardinality
             // 
             this.txtMaxCardinality.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtMaxCardinality.Name = "txtMaxCardinality";
-            this.txtMaxCardinality.Size = new System.Drawing.Size(50, 27);
+            this.txtMaxCardinality.Size = new System.Drawing.Size(50, 29);
             // 
             // btnGenerate
             // 
-            this.btnGenerate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.btnGenerate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.acyclicToolStripMenuItem,
             this.hypertreeToolStripMenuItem,
             this.arbitraryToolStripMenuItem});
-            this.btnGenerate.Image = ((System.Drawing.Image)(resources.GetObject("btnGenerate.Image")));
+            this.btnGenerate.Image = global::HypergraphProject.Properties.Resources.Generate;
             this.btnGenerate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnGenerate.Name = "btnGenerate";
-            this.btnGenerate.Size = new System.Drawing.Size(33, 24);
+            this.btnGenerate.Size = new System.Drawing.Size(89, 26);
             this.btnGenerate.Text = "Generate";
             // 
             // acyclicToolStripMenuItem
             // 
             this.acyclicToolStripMenuItem.Name = "acyclicToolStripMenuItem";
-            this.acyclicToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.acyclicToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.acyclicToolStripMenuItem.Text = "α-Acyclic";
             // 
             // hypertreeToolStripMenuItem
             // 
             this.hypertreeToolStripMenuItem.Name = "hypertreeToolStripMenuItem";
-            this.hypertreeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.hypertreeToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.hypertreeToolStripMenuItem.Text = "Hypertree";
             // 
             // arbitraryToolStripMenuItem
             // 
             this.arbitraryToolStripMenuItem.Name = "arbitraryToolStripMenuItem";
-            this.arbitraryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.arbitraryToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.arbitraryToolStripMenuItem.Text = "Arbitrary";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 29);
             // 
             // btnDual
             // 
-            this.btnDual.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnDual.Image = ((System.Drawing.Image)(resources.GetObject("btnDual.Image")));
+            this.btnDual.Image = global::HypergraphProject.Properties.Resources.Dual;
             this.btnDual.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnDual.Name = "btnDual";
-            this.btnDual.Size = new System.Drawing.Size(24, 24);
+            this.btnDual.Size = new System.Drawing.Size(57, 26);
             this.btnDual.Text = "Dual";
             // 
             // mnuMain
@@ -213,20 +209,34 @@
             this.infoToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.infoToolStripMenuItem.Text = "Info";
             // 
-            // matrixControl1
+            // matrixControl
             // 
-            this.matrixControl1.Dimension = new System.Drawing.Size(0, 0);
-            this.matrixControl1.Location = new System.Drawing.Point(12, 54);
-            this.matrixControl1.Name = "matrixControl1";
-            this.matrixControl1.Size = new System.Drawing.Size(150, 150);
-            this.matrixControl1.TabIndex = 2;
+            this.matrixControl.BackColor = System.Drawing.Color.White;
+            this.matrixControl.Dimension = new System.Drawing.Size(0, 0);
+            this.matrixControl.Location = new System.Drawing.Point(3, 3);
+            this.matrixControl.Name = "matrixControl";
+            this.matrixControl.Size = new System.Drawing.Size(150, 150);
+            this.matrixControl.TabIndex = 2;
+            // 
+            // pnlMatrixContainer
+            // 
+            this.pnlMatrixContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlMatrixContainer.AutoScroll = true;
+            this.pnlMatrixContainer.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.pnlMatrixContainer.Controls.Add(this.matrixControl);
+            this.pnlMatrixContainer.Location = new System.Drawing.Point(12, 56);
+            this.pnlMatrixContainer.Name = "pnlMatrixContainer";
+            this.pnlMatrixContainer.Size = new System.Drawing.Size(756, 410);
+            this.pnlMatrixContainer.TabIndex = 3;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(780, 478);
-            this.Controls.Add(this.matrixControl1);
+            this.Controls.Add(this.pnlMatrixContainer);
             this.Controls.Add(this.toolMain);
             this.Controls.Add(this.mnuMain);
             this.MainMenuStrip = this.mnuMain;
@@ -237,6 +247,7 @@
             this.toolMain.PerformLayout();
             this.mnuMain.ResumeLayout(false);
             this.mnuMain.PerformLayout();
+            this.pnlMatrixContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -264,7 +275,8 @@
         private System.Windows.Forms.MenuStrip mnuMain;
         private System.Windows.Forms.ToolStripMenuItem programToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
-        private Interface.MatrixControl matrixControl1;
+        private Interface.MatrixControl matrixControl;
+        private System.Windows.Forms.Panel pnlMatrixContainer;
     }
 }
 

@@ -18,7 +18,7 @@ namespace HypergraphProject
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            matrixControl1.Dimension = new Size(25, 15);
+            matrixControl.Dimension = new Size(25, 35);
         }
     }
 }
