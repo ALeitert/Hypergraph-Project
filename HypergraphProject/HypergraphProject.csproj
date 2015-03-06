@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interface\MatrixControl\ColorFunction.cs" />
-    <Compile Include="Interface\MatrixControl\EditMode.cs" />
+    <Compile Include="Interface\MatrixControl\EditStatus.cs" />
     <Compile Include="Interface\MatrixControl\MatrixColors.cs" />
     <Compile Include="Interface\MatrixControl\MatrixControl.cs">
       <SubType>UserControl</SubType>

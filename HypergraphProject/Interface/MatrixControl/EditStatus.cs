@@ -5,7 +5,7 @@ using System.Text;
 
 namespace HypergraphProject.Interface
 {
-    public enum EditMode : int
+    public enum EditStatus : int
     {
         Fixed = 0,
         Add = 1,

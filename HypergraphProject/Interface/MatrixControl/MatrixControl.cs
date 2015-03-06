@@ -159,18 +159,18 @@ namespace HypergraphProject.Interface
 
             // ----------
 
-            EditMode matrixEditMode = EditMode.Fixed; // ToDo: Build proper matrix edit mode.
+            EditStatus matrixEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
 
 
             if (mousCoord.X > 0 && mousCoord.Y > 0)
             {
                 Point fieldPt = GuiToField(mousCoord);
 
-                EditMode rowEditMode = EditMode.Fixed; // ToDo: Build proper matrix edit mode.
-                EditMode colEditMode = EditMode.Fixed; // ToDo: Build proper matrix edit mode.
+                EditStatus rowEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
+                EditStatus colEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
 
-                Brush rowBrush = new SolidBrush(Colors[matrixEditMode, rowEditMode, true]);
-                Brush colBrush = new SolidBrush(Colors[matrixEditMode, colEditMode, true]);
+                Brush rowBrush = new SolidBrush(Colors[matrixEditStatus, rowEditStatus, true]);
+                Brush colBrush = new SolidBrush(Colors[matrixEditStatus, colEditStatus, true]);
 
                 Rectangle rowRec =
                     new Rectangle(
@@ -190,7 +190,7 @@ namespace HypergraphProject.Interface
 
 
                 // Because row and column cross, there has to be a rule which color the field gets if both edit modes are different.
-                if (colEditMode > rowEditMode)
+                if (colEditStatus > rowEditStatus)
                 {
                     g.FillRectangle(rowBrush, rowRec);
                     g.FillRectangle(colBrush, colRec);
@@ -217,14 +217,16 @@ namespace HypergraphProject.Interface
                 for (int y = 0; y < Dimension.Height; y++)
                 {
                     bool isOne = this[x, y];
-                    EditMode rowEditMode = EditMode.Fixed; // ToDo: Build proper matrix edit mode.
-                    EditMode colEditMode = EditMode.Fixed; // ToDo: Build proper matrix edit mode.
+                    bool toggle = false&& isOne; // ToDo: determine toggle.
 
-                    EditMode fieldEM = (EditMode)Math.Max((int)rowEditMode, (int)colEditMode);
+                    EditStatus rowEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
+                    EditStatus colEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
 
-                    Color bgColor = Colors[isOne, fieldEM, ColorFunction.Background];
-                    Color borderColor = Colors[isOne, fieldEM, ColorFunction.Border];
-                    Color textColor = Colors[isOne, fieldEM, ColorFunction.Text];
+                    EditStatus fieldES = (EditStatus)Math.Max((int)rowEditStatus, (int)colEditStatus);
+
+                    Color bgColor = Colors[isOne, toggle, fieldES, ColorFunction.Background];
+                    Color borderColor = Colors[isOne, toggle, fieldES, ColorFunction.Border];
+                    Color textColor = Colors[isOne, toggle, fieldES, ColorFunction.Text];
 
                     Rectangle fieldRec =
                         new Rectangle(
