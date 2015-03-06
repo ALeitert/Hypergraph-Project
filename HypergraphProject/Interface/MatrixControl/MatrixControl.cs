@@ -131,6 +131,8 @@ namespace HypergraphProject.Interface
         {
             base.OnClick(e);
 
+            if (!IsEditing) return;
+
             if (mousCoord.X > 0 && mousCoord.X < this.Width - 1 && mousCoord.Y > 0 && mousCoord.Y < this.Height - 1)
             {
                 Point fieldPt = GuiToField(mousCoord);
