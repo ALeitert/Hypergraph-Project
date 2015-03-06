@@ -21,6 +21,9 @@ namespace HypergraphProject.Interface
 
         private Point mousCoord = new Point(-1, -1);
 
+        // Variables for editing.
+        private Size oldDimension;
+        private BitMatrix oldMatrix = null;
 
         public MatrixControl()
         {
@@ -33,6 +36,10 @@ namespace HypergraphProject.Interface
 
         }
 
+        /// <summary>
+        /// Determines if the matrix can be edited.
+        /// </summary>
+        public bool IsEditing { get; protected set; }
 
         /// <summary>
         /// Returns or sets the size of the matrix.
@@ -202,7 +209,11 @@ namespace HypergraphProject.Interface
                 for (int y = 0; y < Dimension.Height; y++)
                 {
                     bool isOne = this[x, y];
-                    bool toggle = false&& isOne; // ToDo: determine toggle.
+                    bool toggle = 
+                        IsEditing && 
+                        x < oldDimension.Width &&
+                        y < oldDimension.Height &&
+                        oldMatrix[x, y] != isOne;
 
                     EditStatus rowEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
                     EditStatus colEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
@@ -238,7 +249,7 @@ namespace HypergraphProject.Interface
                             font,
                             new SolidBrush(textColor),
                             new RectangleF(
-                                // + 1 because of the frame.
+                            // + 1 because of the frame.
                                 fieldSize.Width * x + 1,
                                 fieldSize.Height * y + 2,
                                 fieldSize.Width,
@@ -300,5 +311,42 @@ namespace HypergraphProject.Interface
 
         }
 
+        /// <summary>
+        /// Switches the control into edit mode and allows to change values of the matrix.
+        /// </summary>
+        public void StartEditing()
+        {
+            oldMatrix = matrix.Clone();
+            oldDimension = Dimension;
+            IsEditing = true;
+        }
+
+        /// <summary>
+        /// Switches back to normal mode and restores the original matrix.
+        /// </summary>
+        public void CancelEditing()
+        {
+            matrix = oldMatrix;
+            oldMatrix = null;
+
+            // ToDo: Handle change of dimensions.
+
+            IsEditing = false;
+            Refresh();
+        }
+
+        /// <summary>
+        /// Switches back to normal mode and saves the changes.
+        /// </summary>
+        public void ExecuteEditing()
+        {
+            oldMatrix = null;
+
+            // ToDo: Remove/Add rows and columns. 
+
+            IsEditing = false;
+            Refresh();
+        }
+  
     }
 }
