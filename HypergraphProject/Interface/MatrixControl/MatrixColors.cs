@@ -50,11 +50,14 @@ namespace HypergraphProject.Interface
             // ------------------------------
 
 
-            // Matrix EditStatus, Row EditStatus, Mouse
-            bgColorSet = new Color[3, 3, 2];
+            // Editing on/off, Row EditStatus, Mouse
+            bgColorSet = new Color[2, 3, 2];
 
-            this[EditStatus.Fixed, EditStatus.Fixed, false] = Color.Transparent;
-            this[EditStatus.Fixed, EditStatus.Fixed, true] = Color.LightYellow;
+            this[false, EditStatus.Fixed, false] = Color.Transparent;
+            this[false, EditStatus.Fixed, true] = Color.LightYellow;
+
+            this[true, EditStatus.Fixed, false] = Color.Transparent;
+            this[true, EditStatus.Fixed, true] = Color.LightYellow;
 
             // ToDo: Remaining colors.
 
@@ -101,8 +104,8 @@ namespace HypergraphProject.Interface
         /// <summary>
         /// Returns the background color for rows and colums.
         /// </summary>
-        /// <param name="matrixEditStatus">
-        /// The global edit mode.
+        /// <param name="editing">
+        /// Is matrix in edit mode?
         /// </param>
         /// <param name="rowEditStatus">
         /// The edit mode of this field, i.e. of this row or column.
@@ -111,12 +114,12 @@ namespace HypergraphProject.Interface
         /// Is the mouse over this row or column.
         /// </param>
         /// <returns></returns>
-        public Color this[EditStatus matrixEditStatus, EditStatus rowEditStatus, bool mouseHover]
+        public Color this[bool editing, EditStatus rowEditStatus, bool mouseHover]
         {
             get
             {
                 return bgColorSet[
-                    (int)matrixEditStatus,
+                    editing ? 1 : 0,
                     (int)rowEditStatus,
                     mouseHover ? 1 : 0
                 ];
@@ -124,7 +127,7 @@ namespace HypergraphProject.Interface
             set
             {
                 bgColorSet[
-                    (int)matrixEditStatus,
+                    editing ? 1 : 0,
                     (int)rowEditStatus,
                     mouseHover ? 1 : 0
                 ] = value;
