@@ -15,6 +15,16 @@ namespace HypergraphProject.Interface
     public partial class MatrixControl : UserControl
     {
 
+        private enum Area
+        {
+            Matrix,
+            Buttom,
+            Right,
+            Corner,
+            Frame,
+            Unknown,
+        }
+
         private Size fieldSize = new Size(16, 16);
         private Size dimension;
 
@@ -71,6 +81,19 @@ namespace HypergraphProject.Interface
             }
         }
 
+        public Rectangle Matrix
+        {
+            get
+            {
+                return new Rectangle(
+                    1,
+                    1,
+                    fieldSize.Width * Dimension.Width,
+                    fieldSize.Height * Dimension.Height
+                );
+            }
+        }
+
         /// <summary>
         /// Returns or sets the value of a field.
         /// </summary>
@@ -107,10 +130,36 @@ namespace HypergraphProject.Interface
 
         private Point GuiToField(Point guiPt)
         {
-            // - 1 to correct extra pixel taken by frame.
+            int dX = 0;
+            int dY = 0;
+
+            // Correct extra pixel taken by frame.
+            switch (GetArea(guiPt))
+            {
+                case Area.Matrix:
+                    dX = 1;
+                    dY = 1;
+                    break;
+
+                case Area.Buttom:
+                    dX = 1;
+                    dY = 2;
+                    break;
+
+                case Area.Right:
+                    dX = 2;
+                    dY = 1;
+                    break;
+
+                case Area.Corner:
+                    dX = 2;
+                    dY = 2;
+                    break;
+            }
+
             return new Point(
-                (guiPt.X - 1) / fieldSize.Width,
-                (guiPt.Y - 1) / fieldSize.Height
+                (guiPt.X - dX) / fieldSize.Width,
+                (guiPt.Y - dY) / fieldSize.Height
             );
         }
 
@@ -133,52 +182,57 @@ namespace HypergraphProject.Interface
         }
 
         /// <summary>
-        /// Determines if the given coordinate is in the matrix.
+        /// Determines in which type of area the given coordinate is.
         /// </summary>
-        private bool IsInMatrix(Point guiPoint)
+        private Area GetArea(Point guiPoint)
         {
-            // 1 space for border.
-            int matrixX = 1;
-            int matrixY = 1;
 
-            int matrixWidth = fieldSize.Width * Dimension.Width;
-            int matrixHeight = fieldSize.Height * Dimension.Height;
+            int[] xMapRange = { 0, 1, Matrix.Width, 1, fieldSize.Width, 1 };
+            int[] yMapRange = { 0, 1, Matrix.Height, 1, fieldSize.Height, 1 };
 
-            return
-                guiPoint.X >= matrixX &&
-                guiPoint.X < matrixX + matrixWidth &&
-                guiPoint.Y >= matrixY &&
-                guiPoint.Y < matrixY + matrixHeight;
-        }
+            Area[] xMap = { Area.Unknown, Area.Frame, Area.Matrix, Area.Frame, Area.Right, Area.Frame };
+            Area[] yMap = { Area.Unknown, Area.Frame, Area.Matrix, Area.Frame, Area.Buttom, Area.Frame };
 
-        /// <summary>
-        /// Determines if the given coordinate is in the bottom border.
-        /// </summary>
-        private bool IsInBottomBorder(Point guiPoint)
-        {
-            int matrixWidth = fieldSize.Width * Dimension.Width;
-            int matrixHeight = fieldSize.Height * Dimension.Height;
+            Area xArea = Area.Unknown;
+            Area yArea = Area.Unknown;
 
-            return // 1 and 2 for one pixel frames.
-                guiPoint.X >= 1 &&
-                guiPoint.X < matrixWidth + 1 &&
-                guiPoint.Y >= matrixHeight + 2 &&
-                guiPoint.Y < matrixHeight + fieldSize.Height + 2;
-        }
+            int width = 0;
+            for (int x = 0; x < xMapRange.Length; x++)
+            {
+                width += xMapRange[x];
 
-        /// <summary>
-        /// Determines if the given coordinate is in the right border.
-        /// </summary>
-        private bool IsInRightBorder(Point guiPoint)
-        {
-            int matrixWidth = fieldSize.Width * Dimension.Width;
-            int matrixHeight = fieldSize.Height * Dimension.Height;
+                if (guiPoint.X < width)
+                {
+                    xArea = xMap[x];
+                    break;
+                }
+            }
 
-            return // 1 and 2 for one pixel frames.
-                guiPoint.X >= matrixWidth + 2 &&
-                guiPoint.X < matrixWidth + fieldSize.Width + 2 &&
-                guiPoint.Y >= 1 &&
-                guiPoint.Y < matrixHeight + 1;
+            int height = 0;
+            for (int y = 0; y < yMapRange.Length; y++)
+            {
+                height += yMapRange[y];
+
+                if (guiPoint.Y < height)
+                {
+                    yArea = yMap[y];
+                    break;
+                }
+            }
+
+            if (xArea == Area.Right && yArea == Area.Buttom)
+            {
+                return Area.Corner;
+            }
+
+            if (xArea > yArea)
+            {
+                return xArea;
+            }
+            else
+            {
+                return yArea;
+            }
         }
 
         /// <summary>
@@ -246,7 +300,7 @@ namespace HypergraphProject.Interface
 
             if (!IsEditing) return;
 
-            if (IsInMatrix(mouseCoord))
+            if (GetArea(mouseCoord) == Area.Matrix)
             {
                 Point fieldPt = GuiToField(mouseCoord);
                 this[fieldPt.X, fieldPt.Y] = !this[fieldPt.X, fieldPt.Y];
@@ -266,32 +320,18 @@ namespace HypergraphProject.Interface
 
             Graphics g = e.Graphics;
 
-            int matrixWidth = fieldSize.Width * Dimension.Width;
-            int matrixHeight = fieldSize.Height * Dimension.Height;
-
             Font font = new Font("Consolas", 10.0f);
             StringFormat strForm = new StringFormat();
             strForm.Alignment = StringAlignment.Center;
             strForm.LineAlignment = StringAlignment.Center;
 
-            bool mouseInMatrix = IsInMatrix(mouseCoord);
-
-            bool mouseInBottomBorder = IsInBottomBorder(mouseCoord);
-            bool mouseInRightBorder = IsInRightBorder(mouseCoord);
-            bool mouseInBorder = mouseInBottomBorder || mouseInRightBorder;
-
-            // ToDo: Mouse in corner.
-
+            Area mouseArea = GetArea(mouseCoord);
             Point fieldPt = GuiToField(mouseCoord);
-            // ToDo: border point
 
             // ----------
             // Background
 
             g.Clear(this.BackColor);
-
-            bool drawRow = mouseInMatrix || mouseInRightBorder;
-            bool drawCol = mouseInMatrix || mouseInBottomBorder;
 
             Rectangle rowRec =
                 new Rectangle(
@@ -309,41 +349,36 @@ namespace HypergraphProject.Interface
                     this.Height - 2
                 );
 
-            if (drawRow && drawCol)
+            EditStatus rowEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
+            EditStatus colEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
+
+            Brush rowBrush = new SolidBrush(Colors[IsEditing, rowEditStatus, true]);
+            Brush colBrush = new SolidBrush(Colors[IsEditing, colEditStatus, true]);
+
+            switch (mouseArea)
             {
-                EditStatus rowEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
-                EditStatus colEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
+                case Area.Matrix:
+                    // Because row and column cross, there has to be a rule which color the field gets if both edit modes are different.
+                    if (colEditStatus > rowEditStatus)
+                    {
+                        g.FillRectangle(rowBrush, rowRec);
+                        g.FillRectangle(colBrush, colRec);
+                    }
+                    else
+                    {
+                        g.FillRectangle(colBrush, colRec);
+                        g.FillRectangle(rowBrush, rowRec);
+                    }
+                    break;
 
-                Brush rowBrush = new SolidBrush(Colors[IsEditing, rowEditStatus, true]);
-                Brush colBrush = new SolidBrush(Colors[IsEditing, colEditStatus, true]);
-
-                // Because row and column cross, there has to be a rule which color the field gets if both edit modes are different.
-                if (colEditStatus > rowEditStatus)
-                {
-                    g.FillRectangle(rowBrush, rowRec);
+                case Area.Buttom:
                     g.FillRectangle(colBrush, colRec);
-                }
-                else
-                {
-                    g.FillRectangle(colBrush, colRec);
+                    break;
+
+                case Area.Right:
                     g.FillRectangle(rowBrush, rowRec);
-                }
-            }
+                    break;
 
-            if (drawRow && !drawCol)
-            {
-                EditStatus rowEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
-                Brush rowBrush = new SolidBrush(Colors[IsEditing, rowEditStatus, true]);
-
-                g.FillRectangle(rowBrush, rowRec);
-            }
-
-            if (!drawRow && drawCol)
-            {
-                EditStatus colEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
-                Brush colBrush = new SolidBrush(Colors[IsEditing, colEditStatus, true]);
-
-                g.FillRectangle(colBrush, colRec);
             }
 
             // ----------
@@ -351,7 +386,7 @@ namespace HypergraphProject.Interface
 
             if (IsEditing)
             {
-                g.DrawRectangle(new Pen(Color.Gray) { DashStyle = DashStyle.Dash }, 0, 0, matrixWidth + 1, matrixHeight + 1);
+                g.DrawRectangle(new Pen(Color.Gray) { DashStyle = DashStyle.Dash }, 0, 0, Matrix.Width + 1, Matrix.Height + 1);
             }
 
             g.DrawRectangle(Pens.Black, 0, 0, this.Width - 1, this.Height - 1);
@@ -370,9 +405,6 @@ namespace HypergraphProject.Interface
                         x < oldDimension.Width &&
                         y < oldDimension.Height &&
                         oldMatrix[x, y] != isOne;
-
-                    EditStatus rowEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
-                    EditStatus colEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
 
                     EditStatus fieldES = (EditStatus)Math.Max((int)rowEditStatus, (int)colEditStatus);
 
@@ -405,8 +437,6 @@ namespace HypergraphProject.Interface
             {
                 for (int x = 0; x < Dimension.Width; x++)
                 {
-                    EditStatus colEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
-
                     // ToDo: Dynamic charachter and color
 
                     Color bgColor = Color.Transparent;
@@ -421,7 +451,7 @@ namespace HypergraphProject.Interface
                         strForm,
                         new Point(
                             fieldSize.Width * x + 1,
-                            matrixHeight + 2
+                            Matrix.Height + 2
                         ),
                         bgColor,
                         borderColor,
@@ -432,8 +462,6 @@ namespace HypergraphProject.Interface
 
                 for (int y = 0; y < Dimension.Height; y++)
                 {
-                    EditStatus rowEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
-
                     // ToDo: Dynamic charachter and color
 
                     Color bgColor = Color.Transparent;
@@ -447,7 +475,7 @@ namespace HypergraphProject.Interface
                         font,
                         strForm,
                         new Point(
-                            matrixWidth + 2,
+                            Matrix.Width + 2,
                             fieldSize.Height * y + 1
                         ),
                         bgColor,
