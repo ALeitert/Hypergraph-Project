@@ -36,6 +36,10 @@ namespace HypergraphProject.Interface
         private Size oldDimension;
         private BitMatrix oldMatrix = null;
 
+        // List to add new rows and columns easier and more performant.
+        private List<EditStatus> rowEditStatus = null;
+        private List<EditStatus> colEditStatus = null;
+
         public MatrixControl()
         {
             InitializeComponent();
@@ -328,6 +332,13 @@ namespace HypergraphProject.Interface
             Area mouseArea = GetArea(mouseCoord);
             Point fieldPt = GuiToField(mouseCoord);
 
+            EditStatus rowES = 
+                (rowEditStatus != null && rowEditStatus.Count > fieldPt.Y) ? 
+                rowEditStatus[fieldPt.Y] : EditStatus.Fixed;
+            EditStatus colES = 
+                (colEditStatus != null && colEditStatus.Count > fieldPt.X) ?
+                colEditStatus[fieldPt.X] : EditStatus.Fixed;
+
             // ----------
             // Background
 
@@ -349,17 +360,14 @@ namespace HypergraphProject.Interface
                     this.Height - 2
                 );
 
-            EditStatus rowEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
-            EditStatus colEditStatus = EditStatus.Fixed; // ToDo: Build proper matrix edit status.
-
-            Brush rowBrush = new SolidBrush(Colors[IsEditing, rowEditStatus, true]);
-            Brush colBrush = new SolidBrush(Colors[IsEditing, colEditStatus, true]);
+            Brush rowBrush = new SolidBrush(Colors[IsEditing, rowES, true]);
+            Brush colBrush = new SolidBrush(Colors[IsEditing, colES, true]);
 
             switch (mouseArea)
             {
                 case Area.Matrix:
                     // Because row and column cross, there has to be a rule which color the field gets if both edit modes are different.
-                    if (colEditStatus > rowEditStatus)
+                    if (colES > rowES)
                     {
                         g.FillRectangle(rowBrush, rowRec);
                         g.FillRectangle(colBrush, colRec);
@@ -406,7 +414,7 @@ namespace HypergraphProject.Interface
                         y < oldDimension.Height &&
                         oldMatrix[x, y] != isOne;
 
-                    EditStatus fieldES = (EditStatus)Math.Max((int)rowEditStatus, (int)colEditStatus);
+                    EditStatus fieldES = (EditStatus)Math.Max((int)rowES, (int)colES);
 
                     Color bgColor = Colors[isOne, toggle, fieldES, ColorFunction.Background];
                     Color borderColor = Colors[isOne, toggle, fieldES, ColorFunction.Border];
@@ -532,6 +540,20 @@ namespace HypergraphProject.Interface
         {
             oldMatrix = matrix.Clone();
             oldDimension = Dimension;
+
+            rowEditStatus = new List<EditStatus>(Dimension.Height);
+            colEditStatus = new List<EditStatus>(Dimension.Width);
+
+            for (int r = 0; r < rowEditStatus.Count; r++)
+            {
+                rowEditStatus.Add(EditStatus.Fixed);
+            }
+
+            for (int r = 0; r < colEditStatus.Count; r++)
+            {
+                colEditStatus.Add(EditStatus.Fixed);
+            }
+
             IsEditing = true;
             UpdateSize();
         }
@@ -543,6 +565,9 @@ namespace HypergraphProject.Interface
         {
             matrix = oldMatrix;
             oldMatrix = null;
+
+            rowEditStatus = null;
+            colEditStatus = null;
 
             // ToDo: Handle change of dimensions.
 
@@ -559,6 +584,9 @@ namespace HypergraphProject.Interface
             oldMatrix = null;
 
             // ToDo: Remove/Add rows and columns. 
+
+            rowEditStatus = null;
+            colEditStatus = null;
 
             IsEditing = false;
             UpdateSize();
