@@ -8,7 +8,7 @@ namespace HypergraphProject.Interface
     {
 
         private Color[, , ,] fieldColorSet;
-        private Color[, ,] bgColorSet;
+        private Color[,] bgColorSet;
 
         public MatrixColors()
         {
@@ -47,17 +47,36 @@ namespace HypergraphProject.Interface
             this[true, true, EditStatus.Fixed, ColorFunction.Text] = Color.Black;
 
 
+            // ----------
+            // 0 - Remove
+
+            this[false, false, EditStatus.Remove, ColorFunction.Background] = Color.Transparent;
+            this[false, false, EditStatus.Remove, ColorFunction.Border] = Color.Transparent;
+            this[false, false, EditStatus.Remove, ColorFunction.Text] = Color.Gray;
+
+
+            // ----------
+            // 1 - Remove
+
+            this[true, false, EditStatus.Remove, ColorFunction.Background] = Color.FromArgb(0xE5, 0xB9, 0xB7);
+            this[true, false, EditStatus.Remove, ColorFunction.Border] = Color.FromArgb(0x95, 0x37, 0x34);
+            this[true, false, EditStatus.Remove, ColorFunction.Text] = Color.Black;
+
+
             // ------------------------------
 
 
-            // Editing on/off, Row EditStatus, Mouse
-            bgColorSet = new Color[2, 3, 2];
+            // Row EditStatus, Mouse
+            bgColorSet = new Color[3, 2];
 
-            this[false, EditStatus.Fixed, false] = Color.Transparent;
-            this[false, EditStatus.Fixed, true] = Color.LightYellow;
+            this[EditStatus.Fixed, false] = Color.Transparent;
+            this[EditStatus.Fixed, true] = Color.LightYellow;
 
-            this[true, EditStatus.Fixed, false] = Color.Transparent;
-            this[true, EditStatus.Fixed, true] = Color.LightYellow;
+            this[EditStatus.Add, false] = Color.FromArgb(0xEB, 0xF1, 0xDD);
+            this[EditStatus.Add, true] = Color.FromArgb(0xD7, 0xE3, 0xBC);
+
+            this[EditStatus.Remove, false] = Color.FromArgb(0xF2, 0xDC, 0xDB);
+            this[EditStatus.Remove, true] = Color.FromArgb(0xE5, 0xB9, 0xB7);
 
             // ToDo: Remaining colors.
 
@@ -104,9 +123,6 @@ namespace HypergraphProject.Interface
         /// <summary>
         /// Returns the background color for rows and colums.
         /// </summary>
-        /// <param name="editing">
-        /// Is matrix in edit mode?
-        /// </param>
         /// <param name="rowEditStatus">
         /// The edit mode of this field, i.e. of this row or column.
         /// </param>
@@ -114,12 +130,11 @@ namespace HypergraphProject.Interface
         /// Is the mouse over this row or column.
         /// </param>
         /// <returns></returns>
-        public Color this[bool editing, EditStatus rowEditStatus, bool mouseHover]
+        public Color this[EditStatus rowEditStatus, bool mouseHover]
         {
             get
             {
                 return bgColorSet[
-                    editing ? 1 : 0,
                     (int)rowEditStatus,
                     mouseHover ? 1 : 0
                 ];
@@ -127,7 +142,6 @@ namespace HypergraphProject.Interface
             set
             {
                 bgColorSet[
-                    editing ? 1 : 0,
                     (int)rowEditStatus,
                     mouseHover ? 1 : 0
                 ] = value;

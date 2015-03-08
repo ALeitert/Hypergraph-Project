@@ -160,7 +160,7 @@ namespace HypergraphProject.Interface
                     dY = 2;
                     break;
 
-                case Area.Unknown:
+                default:
                     return new Point(-1, -1);
             }
 
@@ -248,16 +248,7 @@ namespace HypergraphProject.Interface
         private void DrawField(Graphics g, string fieldChar, Font font, StringFormat strForm, Point fieldPt, Color bgColor, Color borderColor, Color textColor)
         {
 
-            if (bgColor != Color.Transparent)
-            {
-                g.FillRectangle(
-                    new SolidBrush(bgColor),
-                    fieldPt.X,
-                    fieldPt.Y,
-                    fieldSize.Width,
-                    fieldSize.Height
-                );
-            }
+            DrawFieldBg(g, fieldPt, bgColor);
 
             if (borderColor != Color.Transparent)
             {
@@ -283,6 +274,20 @@ namespace HypergraphProject.Interface
                         fieldSize.Height
                     ),
                     strForm
+                );
+            }
+        }
+
+        private void DrawFieldBg(Graphics g, Point fieldPt, Color bgColor)
+        {
+            if (bgColor != Color.Transparent)
+            {
+                g.FillRectangle(
+                    new SolidBrush(bgColor),
+                    fieldPt.X,
+                    fieldPt.Y,
+                    fieldSize.Width,
+                    fieldSize.Height
                 );
             }
         }
@@ -384,6 +389,7 @@ namespace HypergraphProject.Interface
             strForm.LineAlignment = StringAlignment.Center;
 
             Point fieldPt = GuiToField(mouseCoord);
+            Area mouseArea = GetArea(mouseCoord);
 
             // ----------
             // Background
@@ -470,8 +476,8 @@ namespace HypergraphProject.Interface
                 bool isRow = entry < 0;
                 int entryIndex = (isRow ? -1 : 1) * entry - 1;
                 bool isMouse = entryIndex == (isRow ? fieldPt.Y : fieldPt.X);
-                
-                Color rsColor = Colors[IsEditing, entryES, isMouse];
+
+                Color rsColor = Colors[entryES, isMouse];
 
                 if (rsColor != Color.Transparent)
                 {
@@ -487,15 +493,67 @@ namespace HypergraphProject.Interface
                 }
             }
 
+            if (fieldPt.X >= 0 && fieldPt.Y >= 0)
+            {
+                // Fix background of mouse over rows/columns.
 
-            Rectangle colRec =
-                new Rectangle(
-                    fieldSize.Height * fieldPt.X + 1,
-                    1,
-                    fieldSize.Width,
-                    this.Height - 2
-                );
+                EditStatus mcES =
+                    (colEditStatus != null && colEditStatus.Count > fieldPt.X) ?
+                    colEditStatus[fieldPt.X] : EditStatus.Fixed;
 
+                EditStatus mrES =
+                    (rowEditStatus != null && rowEditStatus.Count > fieldPt.Y) ?
+                    rowEditStatus[fieldPt.Y] : EditStatus.Fixed;
+
+                if (fieldPt.Y < Dimension.Height)
+                {
+                    for (int c = 0; c < Dimension.Width; c++)
+                    {
+                        if (c == fieldPt.X) continue;
+
+                        EditStatus cES =
+                            (colEditStatus != null && colEditStatus.Count > c) ?
+                            colEditStatus[c] : EditStatus.Fixed;
+
+                        if (mrES < cES || (mrES == cES && mrES != EditStatus.Fixed))
+                        {
+                            DrawFieldBg(
+                                g,
+                                new Point(
+                                    fieldSize.Width * c + 1,
+                                    fieldSize.Height * fieldPt.Y + 1
+                                ),
+                                Colors[cES, true]
+                            );
+                        }
+
+                    }
+                }
+
+                if (fieldPt.X < Dimension.Width)
+                {
+                    for (int r = 0; r < Dimension.Height; r++)
+                    {
+                        if (r == fieldPt.Y) continue;
+
+                        EditStatus rES =
+                            (colEditStatus != null && rowEditStatus.Count > r) ?
+                            rowEditStatus[r] : EditStatus.Fixed;
+
+                        if (mcES < rES || (mcES == rES && mcES != EditStatus.Fixed))
+                        {
+                            DrawFieldBg(
+                                g,
+                                new Point(
+                                    fieldSize.Width * fieldPt.X + 1,
+                                    fieldSize.Height * r + 1
+                                ),
+                                Colors[rES, true]
+                            );
+                        }
+                    }
+                }
+            }
 
             // ----------
             // Frame
