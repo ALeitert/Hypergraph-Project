@@ -304,11 +304,62 @@ namespace HypergraphProject.Interface
 
             if (!IsEditing) return;
 
-            if (GetArea(mouseCoord) == Area.Matrix)
+            Point fieldPt = GuiToField(mouseCoord);
+
+            EditStatus[] oldEditChange = 
             {
-                Point fieldPt = GuiToField(mouseCoord);
-                this[fieldPt.X, fieldPt.Y] = !this[fieldPt.X, fieldPt.Y];
+                EditStatus.Remove, 
+                EditStatus.Remove, // Should not happen.
+                EditStatus.Fixed 
+            };
+
+            EditStatus[] newEditChange = 
+            {
+                EditStatus.Remove, // Should not happen. 
+                EditStatus.Remove,
+                EditStatus.Add 
+            };
+
+            switch (GetArea(mouseCoord))
+            {
+                case Area.Matrix:
+                    this[fieldPt.X, fieldPt.Y] = !this[fieldPt.X, fieldPt.Y];
+                    break;
+
+                case Area.Buttom:
+
+                    if (fieldPt.X < oldDimension.Width)
+                    {
+                        // Alredy existing column.
+                        colEditStatus[fieldPt.X] = oldEditChange[(int)colEditStatus[fieldPt.X]];
+                    }
+                    else
+                    {
+                        // New column.
+                        colEditStatus[fieldPt.X] = newEditChange[(int)colEditStatus[fieldPt.X]];
+                    }
+
+                    break;
+
+                case Area.Right:
+
+                    if (fieldPt.Y < oldDimension.Height)
+                    {
+                        // Alredy existing column.
+                        rowEditStatus[fieldPt.Y] = oldEditChange[(int)rowEditStatus[fieldPt.Y]];
+                    }
+                    else
+                    {
+                        // New column.
+                        rowEditStatus[fieldPt.Y] = newEditChange[(int)rowEditStatus[fieldPt.Y]];
+                    }
+
+                    break;
+
+                case Area.Corner:
+                    break;
             }
+
         }
 
         /// <summary>
@@ -332,10 +383,10 @@ namespace HypergraphProject.Interface
             Area mouseArea = GetArea(mouseCoord);
             Point fieldPt = GuiToField(mouseCoord);
 
-            EditStatus rowES = 
-                (rowEditStatus != null && rowEditStatus.Count > fieldPt.Y) ? 
+            EditStatus rowES =
+                (rowEditStatus != null && rowEditStatus.Count > fieldPt.Y) ?
                 rowEditStatus[fieldPt.Y] : EditStatus.Fixed;
-            EditStatus colES = 
+            EditStatus colES =
                 (colEditStatus != null && colEditStatus.Count > fieldPt.X) ?
                 colEditStatus[fieldPt.X] : EditStatus.Fixed;
 
@@ -405,6 +456,11 @@ namespace HypergraphProject.Interface
 
             for (int x = 0; x < Dimension.Width; x++)
             {
+
+                EditStatus xES =
+                    (colEditStatus != null && colEditStatus.Count > x) ?
+                    colEditStatus[x] : EditStatus.Fixed;
+
                 for (int y = 0; y < Dimension.Height; y++)
                 {
                     bool isOne = this[x, y];
@@ -414,7 +470,12 @@ namespace HypergraphProject.Interface
                         y < oldDimension.Height &&
                         oldMatrix[x, y] != isOne;
 
-                    EditStatus fieldES = (EditStatus)Math.Max((int)rowES, (int)colES);
+                    EditStatus yES =
+                        (rowEditStatus != null && rowEditStatus.Count > y) ?
+                        rowEditStatus[y] : EditStatus.Fixed;
+
+
+                    EditStatus fieldES = (EditStatus)Math.Max((int)xES, (int)yES);
 
                     Color bgColor = Colors[isOne, toggle, fieldES, ColorFunction.Background];
                     Color borderColor = Colors[isOne, toggle, fieldES, ColorFunction.Border];
@@ -544,12 +605,12 @@ namespace HypergraphProject.Interface
             rowEditStatus = new List<EditStatus>(Dimension.Height);
             colEditStatus = new List<EditStatus>(Dimension.Width);
 
-            for (int r = 0; r < rowEditStatus.Count; r++)
+            for (int r = 0; r < Dimension.Height; r++)
             {
                 rowEditStatus.Add(EditStatus.Fixed);
             }
 
-            for (int r = 0; r < colEditStatus.Count; r++)
+            for (int r = 0; r < Dimension.Width; r++)
             {
                 colEditStatus.Add(EditStatus.Fixed);
             }
