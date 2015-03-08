@@ -159,6 +159,9 @@ namespace HypergraphProject.Interface
                     dX = 2;
                     dY = 2;
                     break;
+
+                case Area.Unknown:
+                    return new Point(-1, -1);
             }
 
             return new Point(
@@ -380,28 +383,110 @@ namespace HypergraphProject.Interface
             strForm.Alignment = StringAlignment.Center;
             strForm.LineAlignment = StringAlignment.Center;
 
-            Area mouseArea = GetArea(mouseCoord);
             Point fieldPt = GuiToField(mouseCoord);
-
-            EditStatus rowES =
-                (rowEditStatus != null && rowEditStatus.Count > fieldPt.Y) ?
-                rowEditStatus[fieldPt.Y] : EditStatus.Fixed;
-            EditStatus colES =
-                (colEditStatus != null && colEditStatus.Count > fieldPt.X) ?
-                colEditStatus[fieldPt.X] : EditStatus.Fixed;
 
             // ----------
             // Background
 
             g.Clear(this.BackColor);
 
-            Rectangle rowRec =
-                new Rectangle(
-                    1,
-                    fieldSize.Height * fieldPt.Y + 1,
-                    this.Width - 2,
-                    fieldSize.Height
-                );
+            List<int> fixedRCs = new List<int>();
+            List<int> addRCs = new List<int>();
+            List<int> removeRCs = new List<int>();
+
+            for (int r = 0; r < Dimension.Height; r++)
+            {
+                EditStatus rES =
+                    (rowEditStatus != null && rowEditStatus.Count > r) ?
+                    rowEditStatus[r] : EditStatus.Fixed;
+
+                int rowEntry = -(r + 1);
+
+                switch (rES)
+                {
+                    case EditStatus.Fixed:
+                        fixedRCs.Add(rowEntry);
+                        break;
+
+                    case EditStatus.Add:
+                        addRCs.Add(rowEntry);
+                        break;
+
+                    case EditStatus.Remove:
+                        removeRCs.Add(rowEntry);
+                        break;
+                }
+            }
+
+            for (int c = 0; c < Dimension.Width; c++)
+            {
+                EditStatus cES =
+                    (colEditStatus != null && colEditStatus.Count > c) ?
+                    colEditStatus[c] : EditStatus.Fixed;
+
+                int colEntry = (c + 1);
+
+                switch (cES)
+                {
+                    case EditStatus.Fixed:
+                        fixedRCs.Add(colEntry);
+                        break;
+
+                    case EditStatus.Add:
+                        addRCs.Add(colEntry);
+                        break;
+
+                    case EditStatus.Remove:
+                        removeRCs.Add(colEntry);
+                        break;
+                }
+            }
+
+            // Allows to iterate over one list.
+            List<int> allRCs = new List<int>(fixedRCs.Count + addRCs.Count + removeRCs.Count);
+            allRCs.AddRange(fixedRCs);
+            allRCs.AddRange(addRCs);
+            allRCs.AddRange(removeRCs);
+
+            for (int i = 0; i < allRCs.Count; i++)
+            {
+                int entry = allRCs[i];
+
+                EditStatus entryES;
+
+                if (i < fixedRCs.Count)
+                {
+                    entryES = EditStatus.Fixed;
+                }
+                else if (i < fixedRCs.Count + addRCs.Count)
+                {
+                    entryES = EditStatus.Add;
+                }
+                else
+                {
+                    entryES = EditStatus.Remove;
+                }
+
+                bool isRow = entry < 0;
+                int entryIndex = (isRow ? -1 : 1) * entry - 1;
+                bool isMouse = entryIndex == (isRow ? fieldPt.Y : fieldPt.X);
+                
+                Color rsColor = Colors[IsEditing, entryES, isMouse];
+
+                if (rsColor != Color.Transparent)
+                {
+                    Rectangle rec =
+                        new Rectangle(
+                            isRow ? 1 : fieldSize.Width * entryIndex + 1,
+                            isRow ? fieldSize.Height * entryIndex + 1 : 1,
+                            isRow ? this.Width - 2 : fieldSize.Width,
+                            isRow ? fieldSize.Height : this.Height - 2
+                        );
+
+                    g.FillRectangle(new SolidBrush(rsColor), rec);
+                }
+            }
+
 
             Rectangle colRec =
                 new Rectangle(
@@ -411,34 +496,6 @@ namespace HypergraphProject.Interface
                     this.Height - 2
                 );
 
-            Brush rowBrush = new SolidBrush(Colors[IsEditing, rowES, true]);
-            Brush colBrush = new SolidBrush(Colors[IsEditing, colES, true]);
-
-            switch (mouseArea)
-            {
-                case Area.Matrix:
-                    // Because row and column cross, there has to be a rule which color the field gets if both edit modes are different.
-                    if (colES > rowES)
-                    {
-                        g.FillRectangle(rowBrush, rowRec);
-                        g.FillRectangle(colBrush, colRec);
-                    }
-                    else
-                    {
-                        g.FillRectangle(colBrush, colRec);
-                        g.FillRectangle(rowBrush, rowRec);
-                    }
-                    break;
-
-                case Area.Buttom:
-                    g.FillRectangle(colBrush, colRec);
-                    break;
-
-                case Area.Right:
-                    g.FillRectangle(rowBrush, rowRec);
-                    break;
-
-            }
 
             // ----------
             // Frame
