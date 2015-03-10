@@ -77,7 +77,9 @@ namespace HypergraphProject.Interface
                 {
                     Width = this.Width,
                     Height = this.Height,
-                    bits = (BitArray)this.bits.Clone()
+                    bits = (BitArray)this.bits.Clone(),
+                    xFactor = this.xFactor,
+                    yFactor = this.yFactor
                 };
         }
 
