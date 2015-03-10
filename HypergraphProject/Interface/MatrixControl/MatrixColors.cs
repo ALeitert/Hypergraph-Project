@@ -17,15 +17,12 @@ namespace HypergraphProject.Interface
 
             // ----------
             // 0 - Fixed
-
             this[false, false, EditStatus.Fixed, ColorFunction.Background] = Color.Transparent;
             this[false, false, EditStatus.Fixed, ColorFunction.Border] = Color.Transparent;
             this[false, false, EditStatus.Fixed, ColorFunction.Text] = Color.Gray;
 
-
             // ----------
             // 1 - Fixed
-
             this[true, false, EditStatus.Fixed, ColorFunction.Background] = Color.FromArgb(0xC6, 0xD9, 0xF0);
             this[true, false, EditStatus.Fixed, ColorFunction.Border] = Color.FromArgb(0x1F, 0x49, 0x7D);
             this[true, false, EditStatus.Fixed, ColorFunction.Text] = Color.Black;
@@ -33,15 +30,12 @@ namespace HypergraphProject.Interface
 
             // ----------
             // 0 - Fixed (Toggled)
-
             this[false, true, EditStatus.Fixed, ColorFunction.Background] = Color.FromArgb(0xE5, 0xB9, 0xB7);
             this[false, true, EditStatus.Fixed, ColorFunction.Border] = Color.FromArgb(0x95, 0x37, 0x34);
             this[false, true, EditStatus.Fixed, ColorFunction.Text] = Color.Black;
 
-
             // ----------
             // 1 - Fixed (Toggled)
-
             this[true, true, EditStatus.Fixed, ColorFunction.Background] = Color.FromArgb(0xC3, 0xD6, 0x9B);
             this[true, true, EditStatus.Fixed, ColorFunction.Border] = Color.FromArgb(0x4F, 0x61, 0x28);
             this[true, true, EditStatus.Fixed, ColorFunction.Text] = Color.Black;
@@ -49,18 +43,44 @@ namespace HypergraphProject.Interface
 
             // ----------
             // 0 - Remove
-
             this[false, false, EditStatus.Remove, ColorFunction.Background] = Color.Transparent;
             this[false, false, EditStatus.Remove, ColorFunction.Border] = Color.Transparent;
             this[false, false, EditStatus.Remove, ColorFunction.Text] = Color.Gray;
 
-
             // ----------
             // 1 - Remove
+            this[true, false, EditStatus.Remove, ColorFunction.Background] = Color.Transparent;
+            this[true, false, EditStatus.Remove, ColorFunction.Border] = Color.Transparent;
+            this[true, false, EditStatus.Remove, ColorFunction.Text] = Color.Gray;
 
-            this[true, false, EditStatus.Remove, ColorFunction.Background] = Color.FromArgb(0xE5, 0xB9, 0xB7);
-            this[true, false, EditStatus.Remove, ColorFunction.Border] = Color.FromArgb(0x95, 0x37, 0x34);
-            this[true, false, EditStatus.Remove, ColorFunction.Text] = Color.Black;
+
+            // ----------
+            // 0 - Remove (Toggled)
+            this[false, true, EditStatus.Remove, ColorFunction.Background] = Color.Transparent;
+            this[false, true, EditStatus.Remove, ColorFunction.Border] = Color.Transparent;
+            this[false, true, EditStatus.Remove, ColorFunction.Text] = Color.Gray;
+
+            // ----------
+            // 1 - Remove (Toggled)
+            this[true, true, EditStatus.Remove, ColorFunction.Background] = Color.Transparent;
+            this[true, true, EditStatus.Remove, ColorFunction.Border] = Color.Transparent;
+            this[true, true, EditStatus.Remove, ColorFunction.Text] = Color.Gray;
+
+
+            // ----------
+            // 0 - Add
+            this[false, false, EditStatus.Add, ColorFunction.Background] = Color.Transparent;
+            this[false, false, EditStatus.Add, ColorFunction.Border] = Color.Transparent;
+            this[false, false, EditStatus.Add, ColorFunction.Text] = Color.Gray;
+
+            // ----------
+            // 1 - Add (Toggled)
+            this[true, false, EditStatus.Add, ColorFunction.Background] = Color.FromArgb(0xC3, 0xD6, 0x9B);
+            this[true, false, EditStatus.Add, ColorFunction.Border] = Color.FromArgb(0x4F, 0x61, 0x28);
+            this[true, false, EditStatus.Add, ColorFunction.Text] = Color.Black;
+
+
+            // The cases (0 Add Toggled) and (1 Add) cannot happen.
 
 
             // ------------------------------
