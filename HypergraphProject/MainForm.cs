@@ -62,5 +62,10 @@ namespace HypergraphProject
 
         }
 
+        private void btnDual_Click(object sender, EventArgs e)
+        {
+            matrixControl.Dual();
+        }
+
     }
 }

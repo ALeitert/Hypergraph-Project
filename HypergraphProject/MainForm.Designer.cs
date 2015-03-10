@@ -35,6 +35,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnStartEdit = new System.Windows.Forms.ToolStripButton();
             this.btnStopEdit = new System.Windows.Forms.ToolStripDropDownButton();
+            this.mnuStopEditExecute = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuStopEditCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.btnDual = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.lblVertexLabel = new System.Windows.Forms.ToolStripLabel();
@@ -48,8 +50,6 @@
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.matrixControl = new HypergraphProject.Interface.MatrixControl();
             this.pnlMatrixContainer = new System.Windows.Forms.Panel();
-            this.mnuStopEditExecute = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuStopEditCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.toolMain.SuspendLayout();
             this.mnuMain.SuspendLayout();
             this.pnlMatrixContainer.SuspendLayout();
@@ -131,6 +131,20 @@
             this.btnStopEdit.Text = "Edit";
             this.btnStopEdit.Visible = false;
             // 
+            // mnuStopEditExecute
+            // 
+            this.mnuStopEditExecute.Name = "mnuStopEditExecute";
+            this.mnuStopEditExecute.Size = new System.Drawing.Size(114, 22);
+            this.mnuStopEditExecute.Text = "Execute";
+            this.mnuStopEditExecute.Click += new System.EventHandler(this.mnuStopEditExecute_Click);
+            // 
+            // mnuStopEditCancel
+            // 
+            this.mnuStopEditCancel.Name = "mnuStopEditCancel";
+            this.mnuStopEditCancel.Size = new System.Drawing.Size(114, 22);
+            this.mnuStopEditCancel.Text = "Cancel";
+            this.mnuStopEditCancel.Click += new System.EventHandler(this.mnuStopEditCancel_Click);
+            // 
             // btnDual
             // 
             this.btnDual.Image = global::HypergraphProject.Properties.Resources.Dual;
@@ -138,6 +152,7 @@
             this.btnDual.Name = "btnDual";
             this.btnDual.Size = new System.Drawing.Size(57, 26);
             this.btnDual.Text = "Dual";
+            this.btnDual.Click += new System.EventHandler(this.btnDual_Click);
             // 
             // toolStripSeparator2
             // 
@@ -153,7 +168,8 @@
             // lblVertexNumber
             // 
             this.lblVertexNumber.Name = "lblVertexNumber";
-            this.lblVertexNumber.Size = new System.Drawing.Size(13, 26);
+            this.lblVertexNumber.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
+            this.lblVertexNumber.Size = new System.Drawing.Size(18, 26);
             this.lblVertexNumber.Text = "0";
             this.lblVertexNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -166,7 +182,8 @@
             // lblEdgesNumber
             // 
             this.lblEdgesNumber.Name = "lblEdgesNumber";
-            this.lblEdgesNumber.Size = new System.Drawing.Size(13, 26);
+            this.lblEdgesNumber.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
+            this.lblEdgesNumber.Size = new System.Drawing.Size(18, 26);
             this.lblEdgesNumber.Text = "0";
             this.lblEdgesNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -224,28 +241,14 @@
             this.pnlMatrixContainer.Controls.Add(this.matrixControl);
             this.pnlMatrixContainer.Location = new System.Drawing.Point(12, 56);
             this.pnlMatrixContainer.Name = "pnlMatrixContainer";
-            this.pnlMatrixContainer.Size = new System.Drawing.Size(756, 410);
+            this.pnlMatrixContainer.Size = new System.Drawing.Size(756, 428);
             this.pnlMatrixContainer.TabIndex = 3;
-            // 
-            // mnuStopEditExecute
-            // 
-            this.mnuStopEditExecute.Name = "mnuStopEditExecute";
-            this.mnuStopEditExecute.Size = new System.Drawing.Size(152, 22);
-            this.mnuStopEditExecute.Text = "Execute";
-            this.mnuStopEditExecute.Click += new System.EventHandler(this.mnuStopEditExecute_Click);
-            // 
-            // mnuStopEditCancel
-            // 
-            this.mnuStopEditCancel.Name = "mnuStopEditCancel";
-            this.mnuStopEditCancel.Size = new System.Drawing.Size(152, 22);
-            this.mnuStopEditCancel.Text = "Cancel";
-            this.mnuStopEditCancel.Click += new System.EventHandler(this.mnuStopEditCancel_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(780, 478);
+            this.ClientSize = new System.Drawing.Size(780, 496);
             this.Controls.Add(this.pnlMatrixContainer);
             this.Controls.Add(this.toolMain);
             this.Controls.Add(this.mnuMain);
