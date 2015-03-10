@@ -11,6 +11,10 @@ namespace HypergraphProject.Interface
 
         BitArray bits;
 
+        // Factors to compute the index for the bit array.
+        int xFactor = 1;
+        int yFactor = 1;
+
         private BitMatrix() { }
 
         public BitMatrix(int width, int height)
@@ -22,6 +26,8 @@ namespace HypergraphProject.Interface
 
             Width = width;
             Height = height;
+
+            yFactor = width;
 
             bits = new BitArray(width * height);
 
@@ -62,7 +68,7 @@ namespace HypergraphProject.Interface
         /// </summary>
         private int GetCoordinateIndex(int x, int y, int width)
         {
-            return width * y + x;
+            return yFactor * y + xFactor * x;
         }
 
         public BitMatrix Clone()
@@ -74,5 +80,17 @@ namespace HypergraphProject.Interface
                     bits = (BitArray)this.bits.Clone()
                 };
         }
+
+        public void Transpose()
+        {
+            int h = yFactor;
+            yFactor = xFactor;
+            xFactor = h;
+
+            h = Width;
+            Width = Height;
+            Height = h;
+        }
+
     }
 }

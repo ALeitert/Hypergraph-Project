@@ -816,6 +816,27 @@ namespace HypergraphProject.Interface
             Refresh();
         }
 
+        /// <summary>
+        /// Switches to the dual hypergraph.
+        /// </summary>
+        public void Dual()
+        {
+            if (IsEditing)
+            {
+                oldMatrix.Transpose();
+                oldDimension = new Size(oldDimension.Height, oldDimension.Width);
+
+                List<EditStatus> h = rowEditStatus;
+                rowEditStatus = colEditStatus;
+                colEditStatus = h;
+            }
+
+            matrix.Transpose();
+            dimension = new Size(dimension.Height, dimension.Width);
+            UpdateSize();
+            Refresh();
+        }
+
         private void mnuCornerAddRow_Click(object sender, EventArgs e)
         {
             Dimension = new Size(Dimension.Width, Dimension.Height + 1);
