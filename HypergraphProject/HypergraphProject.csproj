@@ -53,6 +53,12 @@
     <Compile Include="Interface\MatrixControl\MatrixControl.Designer.cs">
       <DependentUpon>MatrixControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interface\MatrixControl\ResizeMatrixDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interface\MatrixControl\ResizeMatrixDialog.Designer.cs">
+      <DependentUpon>ResizeMatrixDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -63,6 +69,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Interface\MatrixControl\MatrixControl.resx">
       <DependentUpon>MatrixControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\MatrixControl\ResizeMatrixDialog.resx">
+      <DependentUpon>ResizeMatrixDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

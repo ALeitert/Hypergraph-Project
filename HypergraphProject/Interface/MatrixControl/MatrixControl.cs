@@ -937,5 +937,29 @@ namespace HypergraphProject.Interface
             Refresh();
         }
 
+        private void mnuCornerResize_Click(object sender, EventArgs e)
+        {
+            ResizeMatrixDialog dlg = new ResizeMatrixDialog(Dimension.Width, Dimension.Height);
+
+            if (dlg.ShowDialog(this.FindForm()) != DialogResult.OK)
+            {
+                return;
+            }
+
+            Dimension = new Size(dlg.Vertices, dlg.Edges);
+
+            for (int x = colEditStatus.Count; x < Dimension.Width; x++)
+            {
+                colEditStatus.Add(EditStatus.Add);
+            }
+
+            for (int y = rowEditStatus.Count; y < Dimension.Height; y++)
+            {
+                rowEditStatus.Add(EditStatus.Add);
+            }
+
+            Refresh();
+        }
+
     }
 }

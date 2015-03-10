@@ -73,6 +73,7 @@
             this.mnuCornerResize.Name = "mnuCornerResize";
             this.mnuCornerResize.Size = new System.Drawing.Size(152, 22);
             this.mnuCornerResize.Text = "Resize...";
+            this.mnuCornerResize.Click += new System.EventHandler(this.mnuCornerResize_Click);
             // 
             // MatrixControl
             // 
