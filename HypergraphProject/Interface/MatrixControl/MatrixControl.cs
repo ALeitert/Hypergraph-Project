@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Data;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Diagnostics;
 
@@ -39,6 +40,8 @@ namespace HypergraphProject.Interface
         // List to add new rows and columns easier and more performant.
         private List<EditStatus> rowEditStatus = null;
         private List<EditStatus> colEditStatus = null;
+
+        private static readonly string letters = "abcdefghijklmnopqrstuvwxyz";
 
         public MatrixControl()
         {
@@ -849,7 +852,23 @@ namespace HypergraphProject.Interface
 
             for (int y = 0; y < Dimension.Height; y++)
             {
-                sw.Write("e" + y.ToString("X") + " ");
+
+                // 26 + 26^2 + ... + 26^n = (26^(n+1) - 1 - 25) / 25
+                int digits = (int)Math.Ceiling(Math.Log((y + 1) * 25 + 26, 26) - 1);
+
+                char[] edgeName = new char[digits];
+                int div = y + 1;
+                int mod;
+
+                for (int d = digits - 1; d >= 0; d--)
+                {
+                    mod = (div - 1) % 26;
+                    edgeName[d] = letters[mod];
+                    div = (div - mod) / 26;
+                }
+
+                sw.Write(edgeName);
+                sw.Write(" ");
 
                 for (int x = 0; x < Dimension.Width; x++)
                 {
@@ -861,6 +880,47 @@ namespace HypergraphProject.Interface
 
             sw.Close();
 
+        }
+
+
+        /// <summary>
+        /// Reads a matrix from a text file.
+        /// </summary>
+        public void ReadFromFile(string path)
+        {
+            StreamReader sr = new StreamReader(path);
+            string fullText = sr.ReadToEnd();
+            sr.Close();
+
+            Regex intRE = new Regex("\\d+");
+
+            Match match = intRE.Match(fullText);
+
+            int w = int.Parse(match.Value);
+            int h = int.Parse(match.NextMatch().Value);
+
+            Size newDim = new Size(w, h);
+            BitMatrix newMatrix = new BitMatrix(w, h);
+
+            Regex edgeRE = new Regex("(0|1){" + w.ToString() + "}");
+            match = edgeRE.Match(fullText, match.Index + match.Length);
+
+            for (int y = 0; y < h; y++)
+            {
+                string bits = match.Value;
+
+                for (int x = 0; x < w; x++)
+                {
+                    newMatrix[x, y] = bits[x] == '1';
+                }
+
+                match = match.NextMatch();
+            }
+
+            dimension = newDim;
+            matrix = newMatrix;
+            UpdateSize();
+            Refresh();
         }
 
         private void mnuCornerAddRow_Click(object sender, EventArgs e)
