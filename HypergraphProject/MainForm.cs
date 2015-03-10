@@ -67,5 +67,52 @@ namespace HypergraphProject
             matrixControl.Dual();
         }
 
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            if (dlgSaveMatrix.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            try
+            {
+                matrixControl.WriteToFile(dlgSaveMatrix.FileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show
+                    (
+                        "Unable to save matrix.\n\n" + e.GetType().Name + "\n" + ex.Message,
+                        "Unable to save matrix.",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+            }
+
+        }
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            if (dlgOpenMatrix.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            try
+            {
+                matrixControl.ReadFromFile(dlgOpenMatrix.FileName);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show
+                    (
+                        "Unable to load matrix.\n\n" + e.GetType().Name + "\n" + ex.Message,
+                        "Unable to load matrix.",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+            }
+        }
+
     }
 }

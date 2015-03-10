@@ -50,6 +50,8 @@
             this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.matrixControl = new HypergraphProject.Interface.MatrixControl();
             this.pnlMatrixContainer = new System.Windows.Forms.Panel();
+            this.dlgOpenMatrix = new System.Windows.Forms.OpenFileDialog();
+            this.dlgSaveMatrix = new System.Windows.Forms.SaveFileDialog();
             this.toolMain.SuspendLayout();
             this.mnuMain.SuspendLayout();
             this.pnlMatrixContainer.SuspendLayout();
@@ -95,6 +97,7 @@
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(62, 26);
             this.btnOpen.Text = "Open";
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
             // btnSave
             // 
@@ -103,6 +106,7 @@
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(57, 26);
             this.btnSave.Text = "Save";
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // toolStripSeparator1
             // 
@@ -290,6 +294,8 @@
         private System.Windows.Forms.ToolStripDropDownButton btnStopEdit;
         private System.Windows.Forms.ToolStripMenuItem mnuStopEditExecute;
         private System.Windows.Forms.ToolStripMenuItem mnuStopEditCancel;
+        private System.Windows.Forms.OpenFileDialog dlgOpenMatrix;
+        private System.Windows.Forms.SaveFileDialog dlgSaveMatrix;
     }
 }
 
