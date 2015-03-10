@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Data;
-using System.Linq;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
@@ -835,6 +835,32 @@ namespace HypergraphProject.Interface
             dimension = new Size(dimension.Height, dimension.Width);
             UpdateSize();
             Refresh();
+        }
+
+        /// <summary>
+        /// Saves the matrix as text file.
+        /// </summary>
+        public void WriteToFile(string path)
+        {
+            StreamWriter sw = new StreamWriter(path);
+
+            sw.WriteLine(Dimension.Width.ToString());
+            sw.WriteLine(Dimension.Height.ToString());
+
+            for (int y = 0; y < Dimension.Height; y++)
+            {
+                sw.Write("e" + y.ToString("X") + " ");
+
+                for (int x = 0; x < Dimension.Width; x++)
+                {
+                    sw.Write(matrix[x, y] ? '1' : '0');
+                }
+
+                sw.WriteLine();
+            }
+
+            sw.Close();
+
         }
 
         private void mnuCornerAddRow_Click(object sender, EventArgs e)
