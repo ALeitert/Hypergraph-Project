@@ -365,6 +365,7 @@ namespace HypergraphProject.Interface
                     break;
 
                 case Area.Corner:
+                    mnuCorner.Show(this, mouseCoord);
                     break;
             }
 
@@ -375,7 +376,6 @@ namespace HypergraphProject.Interface
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            int startTime = Environment.TickCount;
             base.OnPaint(e);
 
             // ----------
@@ -741,11 +741,10 @@ namespace HypergraphProject.Interface
         {
             matrix = oldMatrix;
             oldMatrix = null;
+            dimension = oldDimension;
 
             rowEditStatus = null;
             colEditStatus = null;
-
-            // ToDo: Handle change of dimensions.
 
             IsEditing = false;
             UpdateSize();
@@ -759,13 +758,75 @@ namespace HypergraphProject.Interface
         {
             oldMatrix = null;
 
-            // ToDo: Remove/Add rows and columns. 
+            int rowCount = 0;
+            int colCount = 0;
+
+            for (int i = 0; i < Dimension.Height; i++)
+            {
+                if (rowEditStatus[i] == EditStatus.Add || rowEditStatus[i] == EditStatus.Fixed)
+                {
+                    rowCount++;
+                }
+            }
+
+            for (int i = 0; i < Dimension.Width; i++)
+            {
+                if (colEditStatus[i] == EditStatus.Add || colEditStatus[i] == EditStatus.Fixed)
+                {
+                    colCount++;
+                }
+            }
+
+            BitMatrix newMatrix = new BitMatrix(colCount, rowCount);
+
+            colCount = 0;
+
+            for (int x = 0; x < Dimension.Width; x++)
+            {
+                if (colEditStatus[x] == EditStatus.Remove)
+                {
+                    continue;
+                }
+
+                rowCount = 0;
+
+                for (int y = 0; y < Dimension.Height; y++)
+                {
+                    if (rowEditStatus[y] == EditStatus.Remove)
+                    {
+                        continue;
+                    }
+
+                    newMatrix[colCount, rowCount] = matrix[x, y];
+
+                    rowCount++;
+                }
+
+                colCount++;
+            }
+
+            matrix = newMatrix;
+            dimension = new Size(matrix.Width, matrix.Height);
 
             rowEditStatus = null;
             colEditStatus = null;
 
             IsEditing = false;
             UpdateSize();
+            Refresh();
+        }
+
+        private void mnuCornerAddRow_Click(object sender, EventArgs e)
+        {
+            Dimension = new Size(Dimension.Width, Dimension.Height + 1);
+            rowEditStatus.Add(EditStatus.Add);
+            Refresh();
+        }
+
+        private void mnuCornerAddColumn_Click(object sender, EventArgs e)
+        {
+            Dimension = new Size(Dimension.Width + 1, Dimension.Height);
+            colEditStatus.Add(EditStatus.Add);
             Refresh();
         }
 
