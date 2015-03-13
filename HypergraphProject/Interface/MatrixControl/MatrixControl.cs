@@ -881,8 +881,7 @@ namespace HypergraphProject.Interface
             sw.Close();
 
         }
-
-
+        
         /// <summary>
         /// Reads a matrix from a text file.
         /// </summary>
@@ -921,6 +920,32 @@ namespace HypergraphProject.Interface
             matrix = newMatrix;
             UpdateSize();
             Refresh();
+        }
+
+        /// <summary>
+        /// Returns a copy of the current bit matrix.
+        /// </summary>
+        public BitMatrix GetBitMatrix()
+        {
+            return matrix.Clone();
+        }
+
+        /// <summary>
+        /// Returns a copy of the current bit matrix as array of booleans.
+        /// </summary>
+        public bool[,] GetBoolMatrix()
+        {
+            bool[,] boolMatrix = new bool[Dimension.Width, Dimension.Height];
+
+            for (int x = 0; x < Dimension.Width; x++)
+            {
+                for (int y = 0; y < Dimension.Height; y++)
+                {
+                    boolMatrix[x, y] = matrix[x, y];
+                }
+            }
+
+            return boolMatrix;
         }
 
         private void mnuCornerAddRow_Click(object sender, EventArgs e)
