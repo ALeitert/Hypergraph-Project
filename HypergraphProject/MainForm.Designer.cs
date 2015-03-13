@@ -234,6 +234,7 @@
             this.matrixControl.Name = "matrixControl";
             this.matrixControl.Size = new System.Drawing.Size(150, 150);
             this.matrixControl.TabIndex = 2;
+            this.matrixControl.Paint += new System.Windows.Forms.PaintEventHandler(this.matrixControl_Paint);
             // 
             // pnlMatrixContainer
             // 

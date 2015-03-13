@@ -114,5 +114,35 @@ namespace HypergraphProject
             }
         }
 
+        /// <summary>
+        /// Updates labels for size and maximal cardinality.
+        /// </summary>
+        /// <remarks>
+        /// Yes, this is a terrible way to do this, but I am too lazy to implement it properly.
+        /// The proper way would be to make a special event and a heap for max. cardinality.
+        /// </remarks>
+        private void matrixControl_Paint(object sender, PaintEventArgs e)
+        {
+            lblVertexNumber.Text = matrixControl.Dimension.Width.ToString();
+            lblEdgesNumber.Text = matrixControl.Dimension.Height.ToString();
+
+            int maxCard = 0;
+            for (int y = 0; y < matrixControl.Dimension.Height; y++)
+            {
+                int card = 0;
+                for (int x = 0; x < matrixControl.Dimension.Width; x++)
+                {
+                    if (matrixControl[x, y])
+                    {
+                        card++;
+                    }
+                }
+
+                maxCard = Math.Max(maxCard, card);
+            }
+
+            lblMaxCardinalityNumber.Text = maxCard.ToString();
+        }
+
     }
 }
