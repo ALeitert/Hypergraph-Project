@@ -88,7 +88,7 @@ namespace HypergraphProject.Interface
             }
         }
 
-        public Rectangle Matrix
+        public Rectangle MatrixArea
         {
             get
             {
@@ -197,8 +197,8 @@ namespace HypergraphProject.Interface
         private Area GetArea(Point guiPoint)
         {
 
-            int[] xMapRange = { 0, 1, Matrix.Width, 1, fieldSize.Width, 1 };
-            int[] yMapRange = { 0, 1, Matrix.Height, 1, fieldSize.Height, 1 };
+            int[] xMapRange = { 0, 1, MatrixArea.Width, 1, fieldSize.Width, 1 };
+            int[] yMapRange = { 0, 1, MatrixArea.Height, 1, fieldSize.Height, 1 };
 
             Area[] xMap = { Area.Unknown, Area.Frame, Area.Matrix, Area.Frame, Area.Right, Area.Frame };
             Area[] yMap = { Area.Unknown, Area.Frame, Area.Matrix, Area.Frame, Area.Buttom, Area.Frame };
@@ -563,7 +563,7 @@ namespace HypergraphProject.Interface
 
             if (IsEditing)
             {
-                g.DrawRectangle(new Pen(Color.Gray) { DashStyle = DashStyle.Dash }, 0, 0, Matrix.Width + 1, Matrix.Height + 1);
+                g.DrawRectangle(new Pen(Color.Gray) { DashStyle = DashStyle.Dash }, 0, 0, MatrixArea.Width + 1, MatrixArea.Height + 1);
             }
 
             g.DrawRectangle(Pens.Black, 0, 0, this.Width - 1, this.Height - 1);
@@ -638,7 +638,7 @@ namespace HypergraphProject.Interface
                         strForm,
                         new Point(
                             fieldSize.Width * x + 1,
-                            Matrix.Height + 2
+                            MatrixArea.Height + 2
                         ),
                         bgColor,
                         borderColor,
@@ -662,7 +662,7 @@ namespace HypergraphProject.Interface
                         font,
                         strForm,
                         new Point(
-                            Matrix.Width + 2,
+                            MatrixArea.Width + 2,
                             fieldSize.Height * y + 1
                         ),
                         bgColor,
