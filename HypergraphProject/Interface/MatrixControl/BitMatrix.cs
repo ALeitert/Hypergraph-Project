@@ -6,7 +6,7 @@ using System.Text;
 
 namespace HypergraphProject.Interface
 {
-    class BitMatrix
+    public class BitMatrix
     {
 
         BitArray bits;
