@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Hypergraph\Hypergraph.cs" />
+    <Compile Include="Hypergraph\HypergraphGenerator.cs" />
     <Compile Include="Interface\MatrixControl\ColorFunction.cs" />
     <Compile Include="Interface\MatrixControl\EditStatus.cs" />
     <Compile Include="Interface\MatrixControl\BitMatrix.cs" />
@@ -112,6 +114,7 @@
     <Content Include="Interface\Icons\svg\Open.svg" />
     <Content Include="Interface\Icons\svg\Save.svg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
