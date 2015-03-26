@@ -198,11 +198,16 @@ namespace HypergraphProject
 
             int[] alpha = new int[noOfVer];
             int[] betaV = ai.betaV;
-            List<int>[] sets = new List<int>[noOfVer];
+           
             for (int vId = 0; vId < noOfVer; vId++)
             {
-                sets[vId] = new List<int>();
                 alpha[vId] = -1;
+            }
+
+            Set<int>[] sets = new Set<int>[noOfVer + 1];
+            for (int vId = 0; vId < sets.Length; vId++)
+            {
+                sets[vId] = new Set<int>();
             }
 
             int[] R = ai.R;
@@ -218,9 +223,8 @@ namespace HypergraphProject
 
             while (j >= 0)
             {
-                List<int> set = sets[j];
-                int S = set[set.Count - 1];
-                set.RemoveAt(set.Count - 1);
+                Set<int> set = sets[j];
+                int S = set.Remove();
 
                 k++;
                 betaE[S] = k;
@@ -241,7 +245,6 @@ namespace HypergraphProject
 
                         gamma[eId] = k;
 
-                        // ToDo: in O(1)
                         sets[size[eId]].Remove(eId);
 
                         size[eId]++;
