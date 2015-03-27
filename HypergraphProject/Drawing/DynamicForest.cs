@@ -175,5 +175,31 @@ namespace HypergraphProject
             return ids;
         }
 
+        /// <summary>
+        /// Creates a copy of this forest.
+        /// </summary>
+        public DynamicForest Clone()
+        {
+            DynamicForest clone = new DynamicForest(Size);
+
+            for (int i = 0; i < Size; i++)
+            {
+                clone.parentIds.Add(this.parentIds[i]);
+                clone.vertexList.Add(new List<int>(this.vertexList[i]));
+            }
+
+            foreach (int rId in this.rootIds)
+            {
+                clone.rootIds.Add(rId);
+            }
+
+            return clone;
+        }
+
+        public int GetParent(int vId)
+        {
+            return parentIds[vId];
+        }
+
     }
 }
