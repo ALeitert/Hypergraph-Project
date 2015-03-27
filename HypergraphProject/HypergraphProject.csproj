@@ -46,6 +46,7 @@
     <Compile Include="Hypergraph\Hypergraph.cs" />
     <Compile Include="Hypergraph\HypergraphGenerator.cs" />
     <Compile Include="Hypergraph\Set.cs" />
+    <Compile Include="Hypergraph\DynamicForest.cs" />
     <Compile Include="Interface\MatrixControl\ColorFunction.cs" />
     <Compile Include="Interface\MatrixControl\EditStatus.cs" />
     <Compile Include="Interface\MatrixControl\BitMatrix.cs" />
