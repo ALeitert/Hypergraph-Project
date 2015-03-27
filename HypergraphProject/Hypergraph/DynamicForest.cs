@@ -13,6 +13,13 @@ namespace HypergraphProject
         public DynamicForest()
         {
             vertexList = new List<List<int>>();
+            parentIds = new List<int>();
+        }
+
+        public DynamicForest(int capacity)
+        {
+            vertexList = new List<List<int>>(capacity);
+            parentIds = new List<int>(capacity);
         }
 
         public int Size

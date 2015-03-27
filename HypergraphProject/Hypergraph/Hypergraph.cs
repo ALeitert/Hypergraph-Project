@@ -186,6 +186,37 @@ namespace HypergraphProject
             edgeList = tmp;
         }
 
+        /// <summary>
+        /// Creates the join tree (or forest) of this hypergraph.
+        /// If the graph is not acylic, it returns null.
+        /// </summary>
+        public DynamicForest GetJoinTree()
+        {
+            if (!IsAcyclic)
+            {
+                return null;
+            }
+
+            DynamicForest forest = new DynamicForest(edgeList.Length);
+
+            for (int eId = 0; eId < edgeList.Length; eId++)
+            {
+                forest.AddVertex();
+            }
+
+            for (int eId = 0; eId < edgeList.Length; eId++)
+            {
+                int gamma = ai.gamma[eId];
+
+                if (gamma < 0) continue;
+
+                int parId = ai.R[gamma];
+                forest.SetParent(eId, parId);
+            }
+
+            return forest;
+        }
+
         private void MaxCardinalitySearch()
         {
             int noOfVer = vertexList.Length;
