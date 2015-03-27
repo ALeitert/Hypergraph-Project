@@ -34,6 +34,7 @@ namespace HypergraphProject
             matrixControl.StartEditing();
 
             toolMain.SuspendLayout();
+            btnDraw.Enabled = false;
             btnStartEdit.Visible = false;
             btnStopEdit.Visible = true;
             toolMain.ResumeLayout();
@@ -45,6 +46,7 @@ namespace HypergraphProject
             matrixControl.ExecuteEditing();
 
             toolMain.SuspendLayout();
+            btnDraw.Enabled = true;
             btnStartEdit.Visible = true;
             btnStopEdit.Visible = false;
             toolMain.ResumeLayout();
@@ -56,6 +58,7 @@ namespace HypergraphProject
             matrixControl.CancelEditing();
 
             toolMain.SuspendLayout();
+            btnDraw.Enabled = true;
             btnStartEdit.Visible = true;
             btnStopEdit.Visible = false;
             toolMain.ResumeLayout();
