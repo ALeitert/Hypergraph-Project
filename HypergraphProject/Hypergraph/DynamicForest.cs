@@ -10,16 +10,20 @@ namespace HypergraphProject
         List<List<int>> vertexList;
         List<int> parentIds;
 
+        HashSet<int> rootIds;
+
         public DynamicForest()
         {
             vertexList = new List<List<int>>();
             parentIds = new List<int>();
+            rootIds = new HashSet<int>();
         }
 
         public DynamicForest(int capacity)
         {
             vertexList = new List<List<int>>(capacity);
             parentIds = new List<int>(capacity);
+            rootIds = new HashSet<int>();
         }
 
         public int Size
@@ -27,6 +31,14 @@ namespace HypergraphProject
             get
             {
                 return vertexList.Count;
+            }
+        }
+
+        public int NumberOfTrees
+        {
+            get
+            {
+                return rootIds.Count;
             }
         }
 
@@ -52,6 +64,8 @@ namespace HypergraphProject
             int newId = Size;
             vertexList.Add(new List<int>());
             parentIds.Add(-1);
+
+            rootIds.Add(newId);
 
             return newId;
         }
@@ -89,13 +103,13 @@ namespace HypergraphProject
                 throw new ArgumentOutOfRangeException();
             }
 
-            if (parentIds[vId] == pId)
+            int oldParId = parentIds[vId];
+
+            if (oldParId == pId)
             {
                 // Nothing to do.
                 return;
             }
-
-            int oldParId = parentIds[vId];
 
             if (oldParId != -1)
             {
@@ -107,6 +121,7 @@ namespace HypergraphProject
             if (vId == pId)
             {
                 parentIds[vId] = -1;
+                rootIds.Add(vId);
                 return;
             }
 
@@ -114,6 +129,7 @@ namespace HypergraphProject
             vertexList[vId].Add(pId);
 
             parentIds[vId] = pId;
+            rootIds.Remove(vId);
 
         }
 
@@ -126,6 +142,7 @@ namespace HypergraphProject
 
             idQ.Enqueue(vId);
             parentIds[vId] = -1;
+            rootIds.Add(vId);
 
             while (idQ.Count > 0)
             {
@@ -136,10 +153,26 @@ namespace HypergraphProject
                 {
                     if (nId == parentIds[id]) continue;
 
+                    int oldParId = parentIds[nId];
+                    if (oldParId == -1)
+                    {
+                        rootIds.Remove(nId);
+                    }
+
                     parentIds[nId] = id;
                     idQ.Enqueue(nId);
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns the roots of all trees in this forrest.
+        /// </summary>
+        public int[] GetRoots()
+        {
+            int[] ids = new int[rootIds.Count];
+            rootIds.CopyTo(ids);
+            return ids;
         }
 
     }
