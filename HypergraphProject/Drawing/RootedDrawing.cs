@@ -77,9 +77,6 @@ namespace HypergraphProject
             }
         }
 
-        double width;
-        int height;
-
         DynamicForest forest;
         int rootId;
         bool isDummyRoot;
@@ -228,7 +225,7 @@ namespace HypergraphProject
             borders = DrawSubtree(maxHeigtId, data, borderCap);
 
             // Draw trees left of largest subtree.
-            for (int i = maxHeigtIndex - 1; i > 0; i--)
+            for (int i = maxHeigtIndex - 1; i >= 0; i--)
             {
                 int leftId = neighs[i];
                 int leftHeight = data.Height[leftId];
@@ -266,7 +263,7 @@ namespace HypergraphProject
                 {
                     double localShift = leftBorders[h, BorderSide.Left];
                     totalLeftShift += localShift;
-                    borders[h, BorderSide.Left] = localShift + shiftDist;
+                    borders[h, BorderSide.Left] = localShift;
                 }
 
                 if (leftHeight < maxHeigt)
@@ -317,7 +314,7 @@ namespace HypergraphProject
                 {
                     double localShift = rightBorders[h, BorderSide.Right];
                     totalRightShift += localShift;
-                    borders[h, BorderSide.Right] = localShift + shiftDist;
+                    borders[h, BorderSide.Right] = localShift;
                 }
 
                 if (rightHeight < maxHeigt)
@@ -329,7 +326,7 @@ namespace HypergraphProject
             }
 
             // Move trees such that center is 0.
-            double xShift = -(borders[0, BorderSide.Right] + borders[0, BorderSide.Right]) / 2.0;
+            double xShift = -(borders[0, BorderSide.Right] + borders[0, BorderSide.Left]) / 2.0;
 
             borders[0, BorderSide.Right] += xShift;
             borders[0, BorderSide.Left] += xShift;
