@@ -24,6 +24,11 @@ namespace HypergraphProject
                 gamma = new int[noOfEdg];
                 R = new int[noOfEdg];
                 betaV = new int[noOfVer];
+
+                for (int i = 0; i < R.Length; i++)
+                {
+                    R[i] = -1;
+                }
             }
         }
 
@@ -195,10 +200,9 @@ namespace HypergraphProject
             // Therefore, initial value is set to -1 instead of 0.
             int k = -1;
 
-
             int[] alpha = new int[noOfVer];
             int[] betaV = ai.betaV;
-           
+
             for (int vId = 0; vId < noOfVer; vId++)
             {
                 alpha[vId] = -1;
@@ -295,13 +299,20 @@ namespace HypergraphProject
             }
 
             int[] index = new int[noOfVer];
+            for (int i = 0; i < noOfVer; i++)
+            {
+                index[i] = -1;
+            }
 
             for (int i = 0; i < noOfEdg; i++)
             {
                 int eId = ai.R[i];
+
+                if (eId < 0) continue;
+
                 foreach (int vId in edgeList[eId])
                 {
-                    index[vId] = i + 1;
+                    index[vId] = i;
                 }
 
                 foreach (int S in gammaEdges[i])
