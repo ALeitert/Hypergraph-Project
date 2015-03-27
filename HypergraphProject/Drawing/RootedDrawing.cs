@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace HypergraphProject.Drawing
+namespace HypergraphProject
 {
     /// <summary>
     /// Represents a drawing of a tree/forest.
@@ -77,33 +77,12 @@ namespace HypergraphProject.Drawing
             }
         }
 
-        private class DrawingData
-        {
-            internal int[] Height { get; set; }
-            internal int[] Depth { get; set; }
-            internal double[] XShift { get; set; }
-
-            internal DrawingData(int size)
-            {
-                Height = new int[size];
-                Depth = new int[size];
-                XShift = new double[size];
-
-                for (int i = 0; i < size; i++)
-                {
-                    Height[i] = -1;
-                    Depth[i] = -1;
-                    XShift[i] = 0.0;
-                }
-            }
-        }
-
         double width;
         int height;
 
         DynamicForest forest;
         int rootId;
-        bool addedDummyRoot;
+        bool isDummyRoot;
 
         public RootedDrawing(DynamicForest forest)
         {
@@ -123,7 +102,7 @@ namespace HypergraphProject.Drawing
             // If forest is not connected, add dummy root.
             if (this.forest.NumberOfTrees > 1)
             {
-                addedDummyRoot = true;
+                isDummyRoot = true;
                 rootId = this.forest.AddVertex();
 
                 int[] roots = this.forest.GetRoots();
@@ -135,17 +114,17 @@ namespace HypergraphProject.Drawing
             }
             else
             {
-                addedDummyRoot = false;
+                isDummyRoot = false;
                 rootId = this.forest.GetRoots()[0];
             }
         }
 
 
-        public void Draw()
+        public DrawingData Draw()
         {
             // Preprocessing
             int size = forest.Size;
-            DrawingData data = new DrawingData(size);
+            DrawingData data = new DrawingData(size, rootId, isDummyRoot);
 
             Stack<int> vStack = new Stack<int>(size);
             vStack.Push(rootId);
@@ -188,6 +167,30 @@ namespace HypergraphProject.Drawing
             } // while -- calculates height and depth for each vertex.
 
             TreeBorders borders = DrawSubtree(rootId, data, data.Height[rootId] + 1);
+
+            vStack.Push(rootId);
+
+            while (vStack.Count > 0)
+            {
+                int vId = vStack.Pop();
+                int pId = forest.GetParent(vId);
+                double xShift = data.XShift[vId];
+
+                int[] neighs = forest[vId];
+
+                foreach (int nId in neighs)
+                {
+                    if (nId == pId) continue;
+
+                    vStack.Push(nId);
+                    data.XShift[nId] += xShift;
+
+                    data.MinX = Math.Min(data.MinX, data.XShift[nId]);
+                    data.MaxX = Math.Max(data.MaxX, data.XShift[nId]);
+                }
+            }
+
+            return data;
         }
 
         private TreeBorders DrawSubtree(int vId, DrawingData data, int borderCap)
