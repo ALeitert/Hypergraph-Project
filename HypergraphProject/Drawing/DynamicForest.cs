@@ -265,6 +265,7 @@ namespace HypergraphProject
             }
 
             int treeSize = CleanData(vId, -1);
+            int[] realIds = new int[treeSize];
             int indexCounter = 0;
 
             // Search for leaves
@@ -278,13 +279,14 @@ namespace HypergraphProject
                 int v = vQ.Dequeue();
 
                 vertexData[v] = indexCounter;
+                realIds[indexCounter] = v;
                 indexCounter++;
 
                 int[] neighs = this[v];
 
                 if (neighs.Length == 1)
                 {
-                    leaves.Add(v);
+                    leaves.Add(vertexData[v]);
                 }
 
                 foreach (int nId in neighs)
@@ -307,38 +309,39 @@ namespace HypergraphProject
 
             while (vQ.Count > 0)
             {
-                int v = vQ.Dequeue();
+                int vInd = vQ.Dequeue();
 
-                int[] neighs = this[v];
+                int[] neighs = this[realIds[vInd]];
                 foreach (int nId in neighs)
                 {
-                    weight[nId]++;
-                    if (weight[nId] == this[nId].Length - 1)
+                    int nIndex = vertexData[nId];
+                    weight[nIndex]++;
+                    if (weight[nIndex] == this[nId].Length - 1)
                     {
-                        vQ.Enqueue(nId);
-                        layer[nId] = Math.Max(layer[nId], layer[v] + 1);
+                        vQ.Enqueue(nIndex);
+                        layer[nIndex] = Math.Max(layer[nIndex], layer[vInd] + 1);
                     }
                 }
 
-                if (layer[v] > layer[maxLayer[0]])
+                if (layer[vInd] > layer[maxLayer[0]])
                 {
                     maxLayer[1] = maxLayer[0];
-                    maxLayer[0] = v;
+                    maxLayer[0] = vInd;
                 }
-                else if (layer[v] > layer[maxLayer[1]])
+                else if (layer[vInd] > layer[maxLayer[1]])
                 {
-                    maxLayer[1] = v;
+                    maxLayer[1] = vInd;
                 }
 
             }
 
             if (layer[maxLayer[0]] == layer[maxLayer[1]])
             {
-                return maxLayer;
+                return new int[] { realIds[maxLayer[0]], realIds[maxLayer[1]] };
             }
             else // layer[maxLayer[0]] > layer[maxLayer[1]]
             {
-                return new int[] { maxLayer[0] };
+                return new int[] { realIds[maxLayer[0]] };
             }
 
         }
