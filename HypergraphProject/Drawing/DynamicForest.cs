@@ -119,7 +119,7 @@ namespace HypergraphProject
             {
                 // Disconnect vertex from its parent.
                 vertexList[oldParId].Remove(vId);
-                vertexList[vId].Remove(pId);
+                vertexList[vId].Remove(oldParId);
             }
 
             if (vId == pId)
