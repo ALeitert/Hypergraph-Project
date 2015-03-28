@@ -96,26 +96,50 @@ namespace HypergraphProject
 
             this.forest = forest.Clone();
 
-            // If forest is not connected, add dummy root.
-            if (this.forest.NumberOfTrees > 1)
+            PrepareTree();
+
+        }
+
+        private void PrepareTree()
+        {
+            int centerCount = 0;
+            List<int[]> allCenters = new List<int[]>(forest.NumberOfTrees);
+
+            int[] roots = forest.GetRoots();
+            foreach (int rId in roots)
             {
+                int[] centers = forest.GetCenter(rId);
+                centerCount += centers.Length;
+                allCenters.Add(centers);
+            }
+
+            foreach (int[] centers in allCenters)
+            {
+                forest.SetToRoot(centers[0]);
+            }
+
+            if (centerCount > 1)
+            {
+                // Forest is not connected or has two centers.
+                // Add dummy root.
+
                 isDummyRoot = true;
-                rootId = this.forest.AddVertex();
+                rootId = forest.AddVertex();
 
-                int[] roots = this.forest.GetRoots();
-
-                foreach (int rId in roots)
+                foreach (int[] centers in allCenters)
                 {
-                    this.forest.SetParent(rId, rootId);
+                    foreach (int c in centers)
+                    {
+                        forest.SetParent(c, rootId);
+                    }
                 }
             }
             else
             {
                 isDummyRoot = false;
-                rootId = this.forest.GetRoots()[0];
+                rootId = allCenters[0][0];
             }
         }
-
 
         public DrawingData Draw()
         {
