@@ -141,7 +141,41 @@ namespace HypergraphProject
             }
         }
 
-        public DrawingData Draw()
+        public DrawingData DrawLayered()
+        {
+            DrawingData data = InitDrawingData();
+            DrawSubtree(rootId, data, data.Height[rootId] + 1);
+            CalculateAbsuluteValues(data, 1.0);
+            return data;
+        }
+
+        public DrawingData DrawRadial()
+        {
+            DrawingData data = InitDrawingData();
+
+            TreeBorders borders = DrawSubtree(rootId, data, data.Height[rootId] + 1);
+
+            double maxWidth = 0.0;
+            double left = 0.0;
+            double right = 0.0;
+
+            for (int i = 0; i <= data.Height[rootId]; i++)
+            {
+                left += borders[i, BorderSide.Left];
+                right += borders[i, BorderSide.Right];
+
+                maxWidth = Math.Max(maxWidth, right - left);
+            }
+
+            maxWidth += 1.0; // 1 unit space.
+            double scale = 360.0 / maxWidth;
+
+            CalculateAbsuluteValues(data, scale);
+
+            return data;
+        }
+
+        private DrawingData InitDrawingData()
         {
             // Preprocessing
             int size = forest.Size;
@@ -186,30 +220,6 @@ namespace HypergraphProject
                     vStack.Pop();
                 }
             } // while -- calculates height and depth for each vertex.
-
-            TreeBorders borders = DrawSubtree(rootId, data, data.Height[rootId] + 1);
-
-            vStack.Push(rootId);
-
-            while (vStack.Count > 0)
-            {
-                int vId = vStack.Pop();
-                int pId = forest.GetParent(vId);
-                double xShift = data.XShift[vId];
-
-                int[] neighs = forest[vId];
-
-                foreach (int nId in neighs)
-                {
-                    if (nId == pId) continue;
-
-                    vStack.Push(nId);
-                    data.XShift[nId] += xShift;
-
-                    data.MinX = Math.Min(data.MinX, data.XShift[nId]);
-                    data.MaxX = Math.Max(data.MaxX, data.XShift[nId]);
-                }
-            }
 
             return data;
         }
@@ -367,5 +377,32 @@ namespace HypergraphProject
             return borders;
         }
 
+        private void CalculateAbsuluteValues(DrawingData data, double scale)
+        {
+            Stack<int> vStack = new Stack<int>(forest.Size);
+            vStack.Push(rootId);
+
+            while (vStack.Count > 0)
+            {
+                int vId = vStack.Pop();
+                int pId = forest.GetParent(vId);
+                double xShift = data.XShift[vId];
+
+                int[] neighs = forest[vId];
+
+                foreach (int nId in neighs)
+                {
+                    if (nId == pId) continue;
+
+                    vStack.Push(nId);
+                    data.XShift[nId] += xShift;
+                }
+
+                data.XShift[vId] *= scale;
+
+                data.MinX = Math.Min(data.MinX, data.XShift[vId]);
+                data.MaxX = Math.Max(data.MaxX, data.XShift[vId]);
+            }
+        }
     }
 }
