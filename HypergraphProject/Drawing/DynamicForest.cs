@@ -9,6 +9,7 @@ namespace HypergraphProject
     {
         List<List<int>> vertexList;
         List<int> parentIds;
+        List<int> vertexData;
 
         HashSet<int> rootIds;
 
@@ -16,6 +17,7 @@ namespace HypergraphProject
         {
             vertexList = new List<List<int>>();
             parentIds = new List<int>();
+            vertexData = new List<int>();
             rootIds = new HashSet<int>();
         }
 
@@ -23,6 +25,7 @@ namespace HypergraphProject
         {
             vertexList = new List<List<int>>(capacity);
             parentIds = new List<int>(capacity);
+            vertexData = new List<int>(capacity);
             rootIds = new HashSet<int>();
         }
 
@@ -64,6 +67,7 @@ namespace HypergraphProject
             int newId = Size;
             vertexList.Add(new List<int>());
             parentIds.Add(-1);
+            vertexData.Add(0);
 
             rootIds.Add(newId);
 
@@ -185,6 +189,7 @@ namespace HypergraphProject
             for (int i = 0; i < Size; i++)
             {
                 clone.parentIds.Add(this.parentIds[i]);
+                clone.vertexData.Add(this.vertexData[i]);
                 clone.vertexList.Add(new List<int>(this.vertexList[i]));
             }
 
@@ -199,6 +204,143 @@ namespace HypergraphProject
         public int GetParent(int vId)
         {
             return parentIds[vId];
+        }
+
+        private int CleanData(int vId)
+        {
+            return CleanData(vId, 0);
+        }
+
+        private int CleanData(int vId, int value)
+        {
+            if (vId < 0 || vId >= Size)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            // Find root
+            while (parentIds[vId] != -1)
+            {
+                vId = parentIds[vId];
+            }
+
+            int counter = 0;
+
+            Queue<int> vQ = new Queue<int>();
+            vQ.Enqueue(vId);
+
+            while (vQ.Count > 0)
+            {
+                int v = vQ.Dequeue();
+                vertexData[v] = value;
+
+                counter++;
+
+                foreach (int nId in this[v])
+                {
+                    if (nId != parentIds[v])
+                    {
+                        vQ.Enqueue(nId);
+                    }
+                }
+            }
+
+            return counter;
+
+        }
+
+        /// <summary>
+        /// Finds the center of the tree containing the given vertex.
+        /// </summary>
+        public int[] GetCenter(int vId)
+        {
+            if (vId < 0 || vId >= Size)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            if (this[vId].Length == 0)
+            {
+                return new int[] { vId };
+            }
+
+            int treeSize = CleanData(vId, -1);
+            int indexCounter = 0;
+
+            // Search for leaves
+            Queue<int> vQ = new Queue<int>(treeSize);
+            List<int> leaves = new List<int>();
+
+            vQ.Enqueue(vId);
+
+            while (vQ.Count > 0)
+            {
+                int v = vQ.Dequeue();
+
+                vertexData[v] = indexCounter;
+                indexCounter++;
+
+                int[] neighs = this[v];
+
+                if (neighs.Length == 1)
+                {
+                    leaves.Add(v);
+                }
+
+                foreach (int nId in neighs)
+                {
+                    if (vertexData[nId] < 0)
+                    {
+                        vQ.Enqueue(nId);
+                    }
+                }
+            }
+
+            foreach (int v in leaves)
+            {
+                vQ.Enqueue(v);
+            }
+
+            int[] maxLayer = { leaves[0], leaves[1] };
+            int[] weight = new int[treeSize];
+            int[] layer = new int[treeSize];
+
+            while (vQ.Count > 0)
+            {
+                int v = vQ.Dequeue();
+
+                int[] neighs = this[v];
+                foreach (int nId in neighs)
+                {
+                    weight[nId]++;
+                    if (weight[nId] == this[nId].Length - 1)
+                    {
+                        vQ.Enqueue(nId);
+                        layer[nId] = Math.Max(layer[nId], layer[v] + 1);
+                    }
+                }
+
+                if (layer[v] > layer[maxLayer[0]])
+                {
+                    maxLayer[1] = maxLayer[0];
+                    maxLayer[0] = v;
+                }
+                else if (layer[v] > layer[maxLayer[1]])
+                {
+                    maxLayer[1] = v;
+                }
+
+            }
+
+            if (layer[maxLayer[0]] == layer[maxLayer[1]])
+            {
+                return maxLayer;
+            }
+            else // layer[maxLayer[0]] > layer[maxLayer[1]]
+            {
+                return new int[] { maxLayer[0] };
+            }
+
         }
 
     }
