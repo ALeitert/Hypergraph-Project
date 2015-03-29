@@ -239,10 +239,26 @@ namespace HypergraphProject
                 alpha[vId] = -1;
             }
 
-            Set<int>[] sets = new Set<int>[noOfVer + 1];
-            for (int vId = 0; vId < sets.Length; vId++)
+            // Sets
+            // Invarian: The field in front of a set j (i.e. sets[setStart[j] - 1]) is the last element of set j-1 or empty (i.e. -1).
+            int[] sets = new int[noOfVer];
+            int[] posInSets = new int[noOfVer];
+
+            int[] setStart = new int[noOfVer + 1];
+            int[] setLength = new int[noOfVer + 1];
+
+            for (int vId = 0; vId < noOfVer; vId++)
             {
-                sets[vId] = new Set<int>();
+                sets[vId] = vId;
+                posInSets[vId] = vId;
+            }
+
+            setStart[0] = 0;
+            setLength[0] = noOfVer;
+            for (int sInd = 1; sInd < setLength.Length; sInd++)
+            {
+                setStart[sInd] = noOfVer;
+                setLength[sInd] = 0;
             }
 
             int[] R = ai.R;
@@ -253,13 +269,16 @@ namespace HypergraphProject
             for (int S = 0; S < noOfEdg; S++)
             {
                 gamma[S] = -1;
-                sets[0].Add(S);
             }
 
             while (j >= 0)
             {
-                Set<int> set = sets[j];
-                int S = set.Remove();
+                // Remove element from set j
+                int ind = setStart[j] + setLength[j] - 1;
+                setLength[j]--;
+                int S = sets[ind];
+                sets[ind] = -1;
+                posInSets[S] = -1;
 
                 k++;
                 betaE[S] = k;
@@ -280,13 +299,34 @@ namespace HypergraphProject
 
                         gamma[eId] = k;
 
-                        sets[size[eId]].Remove(eId);
+                        // Remove eId from set size[eId]
+                        // Swap with last element in set and then remove from set.
+                        int eInd = posInSets[eId];
+                        int endInd = setStart[size[eId]] + setLength[size[eId]] - 1;
+                        int endId = sets[endInd];
+
+                        // Swap
+                        sets[eInd] = endId;
+                        sets[endInd] = eId;
+                        posInSets[eId] = endInd;
+                        posInSets[endId] = eInd;
+                        eInd = endInd;
+
+                        // Remove
+                        sets[eInd] = -1;
+                        posInSets[eId] = -1;
+                        setLength[size[eId]]--;
 
                         size[eId]++;
 
                         if (size[eId] < edgeList[eId].Length)
                         {
-                            sets[size[eId]].Add(eId);
+                            // Add to next set
+                            eInd = setStart[size[eId]] - 1;
+                            sets[eInd] = eId;
+                            posInSets[eId] = eInd;
+                            setStart[size[eId]]--;
+                            setLength[size[eId]]++;
                         }
                         else if (size[eId] == edgeList[eId].Length)
                         {
@@ -298,7 +338,7 @@ namespace HypergraphProject
                 // In paper: j++
                 j = edgeList[S].Length;
 
-                while (j >= 0 && sets[j].Count == 0)
+                while (j >= 0 && setLength[j] == 0)
                 {
                     j--;
                 }
