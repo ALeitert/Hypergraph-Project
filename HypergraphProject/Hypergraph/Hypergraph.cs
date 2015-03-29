@@ -22,13 +22,13 @@ namespace HypergraphProject
             int[] start;
             int[] length;
 
-            internal EdgeSets(int noOfEdg)
+            internal EdgeSets(int noOfEdg, int noOfVer)
             {
                 edges = new int[noOfEdg];
                 edgePosition = new int[noOfEdg];
 
-                start = new int[noOfEdg + 1];
-                length = new int[noOfEdg + 1];
+                start = new int[noOfVer + 1];
+                length = new int[noOfVer + 1];
 
                 for (int eId = 0; eId < noOfEdg; eId++)
                 {
@@ -352,7 +352,7 @@ namespace HypergraphProject
                 alpha[vId] = -1;
             }
 
-            EdgeSets sets = new EdgeSets(noOfEdg);
+            EdgeSets sets = new EdgeSets(noOfEdg, noOfVer);
 
             int[] R = ai.R;
             int[] size = new int[noOfEdg];
