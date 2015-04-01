@@ -922,6 +922,18 @@ namespace HypergraphProject.Interface
             Refresh();
         }
 
+        public void ReadFromBitMatrix(BitMatrix mat)
+        {
+            dimension = new Size(mat.Width, mat.Height);
+
+            // This is a little hack.
+            // OnDimensionChanged will create a new matrix and copy the data from the old.
+            // Thus, it will make a copy of mat.
+            matrix = mat;
+            OnDimensionChanged(dimension);
+            Refresh();
+        }
+
         /// <summary>
         /// Returns a copy of the current bit matrix.
         /// </summary>
