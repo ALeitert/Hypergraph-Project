@@ -300,6 +300,48 @@ namespace HypergraphProject
         }
 
         /// <summary>
+        /// Return the perfect elimination ordering of the underlying chordal graph if the hypergraph is acyclic.
+        /// </summary>
+        public int[] GetEliminationOrdering()
+        {
+            if (!IsAcyclic)
+            {
+                return null;
+            }
+
+            int noOfVer = vertexList.Length;
+            int noOfEdg = edgeList.Length;
+
+            int[] peo = new int[noOfVer];
+
+            // Counting sort
+
+            // The maximum k is the number of edges.
+            int[] counter = new int[noOfEdg];
+
+            for (int vId = 0; vId < noOfVer; vId++)
+            {
+                counter[ai.betaV[vId]]++;
+            }
+
+            for (int i = 1; i < counter.Length; i++)
+            {
+                counter[i] = counter[i - 1];
+            }
+
+            for (int vId = noOfVer - 1; vId >= 0; vId--)
+            {
+                int cInd = ai.betaV[vId];
+                int pInd = counter[cInd] - 1;
+
+                peo[pInd] = vId;
+                counter[cInd]--;
+            }
+
+            return peo;
+        }
+
+        /// <summary>
         /// Creates the join tree (or forest) of this hypergraph.
         /// If the graph is not acylic, it returns null.
         /// </summary>
@@ -467,5 +509,64 @@ namespace HypergraphProject
 
             ai.IsAcyclic = true;
         }
+
+        /// <summary>
+        /// Computes an optimal colouring for the underlying chordal graph if the hypergraph is acyclic.
+        /// The smalles colour is 1.
+        /// </summary>
+        public int[] GetVertexColouring()
+        {
+            if (!IsAcyclic)
+            {
+                return null;
+            }
+
+            int noOfVer = vertexList.Length;
+            int noOfEdg = edgeList.Length;
+
+            int[] colouring = new int[noOfVer];
+
+            for (int i = 0; i < noOfEdg; i++)
+            {
+                int eId = ai.R[i];
+
+                if (eId == -1) continue; // Not all edges are in the ordering.
+
+                int eCard = edgeList[eId].Length;
+
+                bool[] usedColours = new bool[eCard];
+
+                for (int vInd = 0; vInd < eCard; vInd++)
+                {
+                    int vId = edgeList[eId][vInd];
+                    int vCol = colouring[vId];
+
+                    if (vCol >= eCard || vCol == 0) continue;
+
+                    usedColours[vCol - 1] = true;
+                }
+
+                int colInd = 0;
+
+                for (int vInd = 0; vInd < eCard; vInd++)
+                {
+                    int vId = edgeList[eId][vInd];
+                    int vCol = colouring[vId];
+
+                    if (vCol > 0) continue;
+
+                    while (usedColours[colInd])
+                    {
+                        colInd++;
+                    }
+
+                    colouring[vId] = colInd + 1;
+                    usedColours[colInd] = true;
+                }
+            }
+
+            return colouring;
+        }
+
     }
 }
