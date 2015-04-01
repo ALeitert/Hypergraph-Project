@@ -48,6 +48,12 @@
     <Compile Include="Hypergraph\Hypergraph.cs" />
     <Compile Include="Hypergraph\HypergraphGenerator.cs" />
     <Compile Include="Drawing\DynamicForest.cs" />
+    <Compile Include="Interface\Forms\PictureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interface\Forms\PictureForm.Designer.cs">
+      <DependentUpon>PictureForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interface\MatrixControl\ColorFunction.cs" />
     <Compile Include="Interface\MatrixControl\EditStatus.cs" />
     <Compile Include="Interface\MatrixControl\BitMatrix.cs" />
@@ -72,6 +78,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Interface\Forms\PictureForm.resx">
+      <DependentUpon>PictureForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Interface\MatrixControl\MatrixControl.resx">
       <DependentUpon>MatrixControl.cs</DependentUpon>
     </EmbeddedResource>
