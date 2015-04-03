@@ -145,7 +145,7 @@ namespace HypergraphProject
         {
             DrawingData data = InitDrawingData();
             DrawSubtree(rootId, data, data.Height[rootId] + 1);
-            CalculateAbsuluteValues(data, 1.0);
+            CalculateAbsuluteValues(data, 1.0, false);
             return data;
         }
 
@@ -170,7 +170,7 @@ namespace HypergraphProject
             maxWidth += 1.0; // 1 unit space.
             double scale = 360.0 / maxWidth;
 
-            CalculateAbsuluteValues(data, scale);
+            CalculateAbsuluteValues(data, scale, true);
 
             return data;
         }
@@ -377,28 +377,59 @@ namespace HypergraphProject
             return borders;
         }
 
-        private void CalculateAbsuluteValues(DrawingData data, double scale)
+        private void CalculateAbsuluteValues(DrawingData data, double scale, bool radial)
         {
             Stack<int> vStack = new Stack<int>(forest.Size);
+            Stack<double> sStack = new Stack<double>(forest.Size);
+
             vStack.Push(rootId);
+            sStack.Push(scale);
 
             while (vStack.Count > 0)
             {
+                double maxScale = sStack.Pop();
+
                 int vId = vStack.Pop();
                 int pId = forest.GetParent(vId);
                 double xShift = data.XShift[vId];
 
                 int[] neighs = forest[vId];
 
+                data.XShift[vId] = (pId >= 0 ? data.XShift[pId] : 0) + xShift * maxScale;
+
+                if (radial)
+                {
+                    double minX = 0.0;
+                    double maxX = 0.0;
+
+                    foreach (int nId in neighs)
+                    {
+                        if (nId == pId) continue;
+
+                        minX = Math.Min(minX, data.XShift[nId]);
+                        maxX = Math.Max(maxX, data.XShift[nId]);
+                    }
+
+                    double difX = maxX - minX;
+
+                    if (difX > 0 && data.Depth[vId] > 0)
+                    {
+                        double rad = (double)data.Depth[vId];
+                        double maxDif = 2 * Math.Acos(rad / (rad + 1.0));
+                        maxDif *= (180 / Math.PI);
+
+                        maxScale = Math.Min(maxScale, maxDif / difX);
+                    }
+                }
+
                 foreach (int nId in neighs)
                 {
                     if (nId == pId) continue;
 
                     vStack.Push(nId);
-                    data.XShift[nId] += xShift;
+                    sStack.Push(maxScale);
                 }
 
-                data.XShift[vId] *= scale;
 
                 data.MinX = Math.Min(data.MinX, data.XShift[vId]);
                 data.MaxX = Math.Max(data.MaxX, data.XShift[vId]);
