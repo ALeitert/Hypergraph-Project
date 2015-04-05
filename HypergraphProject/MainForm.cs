@@ -18,15 +18,9 @@ namespace HypergraphProject
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            matrixControl.Dimension = new Size(35, 25);
-
-            Random rng = new Random();
-
-            for (int i = 0; i < 64; i++)
-            {
-                matrixControl[rng.Next(35), rng.Next(25)] = true;
-            }
-
+            matrixControl.ReadFromBitMatrix(
+                HypergraphGenerator.GenerateHypertree(15, 15, 5)
+            );
         }
 
         private void btnStartEdit_Click(object sender, EventArgs e)
