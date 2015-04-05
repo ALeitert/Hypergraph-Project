@@ -93,6 +93,7 @@
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOk.Location = new System.Drawing.Point(68, 133);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(67, 23);
@@ -128,7 +129,7 @@
             this.numVertices.Size = new System.Drawing.Size(109, 20);
             this.numVertices.TabIndex = 8;
             this.numVertices.Value = new decimal(new int[] {
-            1,
+            10,
             0,
             0,
             0});
@@ -152,7 +153,7 @@
             this.numEdges.Size = new System.Drawing.Size(109, 20);
             this.numEdges.TabIndex = 9;
             this.numEdges.Value = new decimal(new int[] {
-            1,
+            10,
             0,
             0,
             0});
@@ -176,7 +177,7 @@
             this.numCard.Size = new System.Drawing.Size(109, 20);
             this.numCard.TabIndex = 10;
             this.numCard.Value = new decimal(new int[] {
-            1,
+            5,
             0,
             0,
             0});
