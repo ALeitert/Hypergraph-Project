@@ -39,7 +39,7 @@ namespace HypergraphProject
             {
                 tree[i] = new List<int>();
             }
-            
+
             for (int i = 1; i < vertices; i++)
             {
                 int parentId = rng.Next(i);
@@ -61,7 +61,7 @@ namespace HypergraphProject
                 int selectedIndex = 1;
 
                 // Select fist vertex of edge
-                int startId =  rng.Next(vertices);
+                int startId = rng.Next(vertices);
                 verBuffer[0] = startId;
 
                 // Copy neighbours of first vertex into buffer.
@@ -113,6 +113,79 @@ namespace HypergraphProject
             return matrix;
 
         }
-  
+
+        /// <summary>
+        /// Generates a matrix which represents a random hypergraph.
+        /// </summary>
+        /// <returns>
+        /// The algorithm *does not* ensure that edges are unique, every vertex is in an edge, or that the graph is connected.
+        /// </returns>
+        public static BitMatrix GenerateHypergraph(HypergraphType type, int vertices, int edges, int maxCard)
+        {
+            BitMatrix matrix;
+
+            switch (type)
+            {
+                case HypergraphType.Arbitrary:
+                    break;
+
+                case HypergraphType.Acyclic:
+                    matrix = GenerateHypertreeMatrix(edges, vertices, maxCard);
+                    matrix.Transpose();
+                    return matrix;
+
+                case HypergraphType.Hypertree:
+                    return GenerateHypertreeMatrix(vertices, edges, maxCard);
+
+                default:
+                    throw new ArgumentException();
+            }
+
+            if (vertices < 1 || edges < 1)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            if (maxCard > vertices || maxCard < 1)
+            {
+                maxCard = vertices;
+            }
+
+            matrix = new BitMatrix(vertices, edges);
+            Random rng = new Random();
+
+            int[] vIds = new int[vertices];
+            for (int vId = 0; vId < vertices; vId++)
+            {
+                vIds[vId] = vId;
+            }
+
+            for (int eId = 0; eId < edges; eId++)
+            {
+                Shuffle(rng, vIds);
+                int card = rng.Next(maxCard - 1) + 1;
+
+                for (int i = 0; i < card; i++)
+                {
+                    matrix[vIds[i], eId] = true;
+                }
+            }
+
+            return matrix;
+
+        }
+
+        private static void Shuffle(Random rng, int[] array)
+        {
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                int ind = rng.Next(array.Length - i) + i;
+
+                int h = array[i];
+                array[i] = array[ind];
+                array[ind] = h;
+            }
+        }
+
     }
 }
