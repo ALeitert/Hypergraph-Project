@@ -15,7 +15,7 @@ namespace HypergraphProject
         /// <returns>
         /// The algorithm *does not* ensure that edges are unique, every vertex is in an edge, or that the graph is connected.
         /// </returns>
-        public static BitMatrix GenerateHypertreeMatrix(int vertices, int edges, int maxCard)
+        public static BitMatrix GenerateHypertree(int vertices, int edges, int maxCard)
         {
 
             if (vertices < 1 || edges < 1)
@@ -48,66 +48,110 @@ namespace HypergraphProject
                 tree[parentId].Add(i);
             }
 
+            // Sets the maximum degree for each vertex.
+            int[] maxDegree = new int[vertices];
+            for (int i = 0; i < vertices; i++)
+            {
+                maxDegree[i] = rng.Next(maxCard / 2 + maxCard % 2) + maxCard / 2;
+            }
 
-            int[] verBuffer = new int[vertices];
-            int[] parBuffer = new int[vertices];
-
-            parBuffer[0] = -1;
+            int[] edgeBuffer = new int[edges];
+            List<int>[] neighbours = new List<int>[edges];
+            List<int>[] parents = new List<int>[edges];
 
             for (int i = 0; i < edges; i++)
             {
-                int card = rng.Next(maxCard) + 1;
-                int bufferSize = 1;
-                int selectedIndex = 1;
+                neighbours[i] = new List<int>();
+                parents[i] = new List<int>();
+                edgeBuffer[i] = i;
+            }
 
-                // Select fist vertex of edge
-                int startId = rng.Next(vertices);
-                verBuffer[0] = startId;
+            // Determine first vertex in edge.
+            int[] verBuffer = new int[vertices];
+            int verBuSize = vertices;
+            for (int i = 0; i < vertices; i++)
+            {
+                verBuffer[i] = i;
+            }
 
-                // Copy neighbours of first vertex into buffer.
-                for (int neighIndex = 0; neighIndex < tree[startId].Count; neighIndex++)
+            for (int i = 0; i < edges; i++)
+            {
+                int rndInd = rng.Next(verBuSize);
+                int vId = verBuffer[rndInd];
+
+                maxDegree[vId]--;
+                matrix[vId, i] = true;
+
+                if (maxDegree[vId] <= 0)
                 {
-                    verBuffer[bufferSize] = tree[startId][neighIndex];
-                    parBuffer[bufferSize] = startId;
-                    bufferSize++;
+                    verBuSize--;
+                    verBuffer[rndInd] = verBuffer[verBuSize];
                 }
 
-                for (; selectedIndex < card; selectedIndex++)
+                // Copy neighbours of first vertex into list.
+                for (int neighIndex = 0; neighIndex < tree[vId].Count; neighIndex++)
                 {
-                    // Pick a random vertex from the available neighbours.
-                    int rndIndex = rng.Next(bufferSize - selectedIndex) + selectedIndex;
-                    int rndId = verBuffer[rndIndex];
-                    int rndParId = parBuffer[rndIndex];
+                    int nId = tree[vId][neighIndex];
+                    if (maxDegree[nId] <= 0) continue;
+                    neighbours[i].Add(nId);
+                    parents[i].Add(vId);
+                }
+            }
 
-                    // Put in front.
-                    int h = verBuffer[selectedIndex];
-                    verBuffer[selectedIndex] = verBuffer[rndIndex];
-                    verBuffer[rndIndex] = h;
 
-                    h = parBuffer[selectedIndex];
-                    parBuffer[selectedIndex] = parBuffer[rndIndex];
-                    parBuffer[rndIndex] = h;
+            int noOfEdges = edges;
 
-                    // Add neighbours to buffer
-                    for (int neighIndex = 0; neighIndex < tree[rndId].Count; neighIndex++)
+            while (noOfEdges > 0)
+            {
+                int edgeInd = rng.Next(noOfEdges);
+                int edgeId = edgeBuffer[edgeInd];
+
+                List<int> neighs = neighbours[edgeId];
+                List<int> pars = parents[edgeId];
+
+                bool foundNext = false;
+
+                while (!foundNext && neighs.Count > 0)
+                {
+                    int neigInd = rng.Next(neighs.Count);
+
+                    int verId = neighs[neigInd];
+                    int parId = pars[neigInd];
+
+                    // Remove form lists.
+                    neighs[neigInd] = neighs[neighs.Count - 1];
+                    pars[neigInd] = pars[pars.Count - 1];
+                    neighs.RemoveAt(neighs.Count - 1);
+                    pars.RemoveAt(pars.Count - 1);
+
+                    if (maxDegree[verId] <= 0) continue;
+
+                    // Found a valid vertex
+                    foundNext = true;
+                    maxDegree[verId]--;
+
+                    matrix[verId, edgeId] = true;
+
+                    // Copy neighbours into list.
+                    for (int neighIndex = 0; neighIndex < tree[verId].Count; neighIndex++)
                     {
-                        int neighId = tree[rndId][neighIndex];
-
-                        if (neighId == rndParId) continue;
-
-                        verBuffer[bufferSize] = neighId;
-                        parBuffer[bufferSize] = rndId;
-                        bufferSize++;
+                        int nId = tree[verId][neighIndex];
+                        if (maxDegree[nId] <= 0 || nId == parId) continue;
+                        neighs.Add(nId);
+                        pars.Add(verId);
                     }
 
                 }
 
-                // Write edge into matrix.
-                for (int j = 0; j < selectedIndex; j++)
+                if (!foundNext)
                 {
-                    matrix[verBuffer[j], i] = true;
+                    // List of possible new vertices is empty.
+                    // The edge cannot grow any more.
+                    noOfEdges--;
+                    neighbours[edgeInd] = neighbours[noOfEdges];
+                    parents[edgeInd] = parents[noOfEdges];
+                    edgeBuffer[edgeInd] = edgeBuffer[noOfEdges];
                 }
-
             }
 
             return matrix;
@@ -130,12 +174,12 @@ namespace HypergraphProject
                     break;
 
                 case HypergraphType.Acyclic:
-                    matrix = GenerateHypertreeMatrix(edges, vertices, maxCard);
+                    matrix = GenerateHypertree(edges, vertices, maxCard);
                     matrix.Transpose();
                     return matrix;
 
                 case HypergraphType.Hypertree:
-                    return GenerateHypertreeMatrix(vertices, edges, maxCard);
+                    return GenerateHypertree(vertices, edges, maxCard);
 
                 default:
                     throw new ArgumentException();
