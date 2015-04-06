@@ -145,7 +145,7 @@ namespace HypergraphProject
         {
             NewHypergraphDialog dlg = new NewHypergraphDialog();
 
-            if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            if (dlg.ShowDialog(this) != System.Windows.Forms.DialogResult.OK)
             {
                 return;
             }
@@ -158,6 +158,34 @@ namespace HypergraphProject
                     dlg.MaxCardinality
                 )
             );
+        }
+
+        private void btnDraw_Click(object sender, EventArgs e)
+        {
+            Hypergraph H = new Hypergraph(matrixControl.GetBitMatrix());
+
+            // Check if hypertree
+            H.TransformToDual();
+            if (!H.IsAcyclic)
+            {
+                MessageBox.Show(
+                    this,
+                    "The given hypergraph is not a hypertree.",
+                    "Not a hypertree.",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
+                return;
+            }
+            H.TransformToDual();
+
+            HypertreeDrawer treeDrawing = new HypertreeDrawer(H);
+
+            PictureForm picForm = new PictureForm();
+            picForm.Image = treeDrawing.DrawAsBitmap(80F);
+
+            picForm.Show();
+
         }
 
     }

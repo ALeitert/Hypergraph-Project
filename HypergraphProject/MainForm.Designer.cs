@@ -175,6 +175,7 @@
             this.btnDraw.Name = "btnDraw";
             this.btnDraw.Size = new System.Drawing.Size(60, 26);
             this.btnDraw.Text = "Draw";
+            this.btnDraw.Click += new System.EventHandler(this.btnDraw_Click);
             // 
             // toolStripSeparator3
             // 

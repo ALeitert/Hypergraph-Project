@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 
@@ -20,7 +21,7 @@ namespace HypergraphProject
 
         List<int>[] edges;
 
-        HypertreeDrawer(Hypergraph hTree)
+        internal HypertreeDrawer(Hypergraph hTree)
         {
 
             if (hTree == null)
@@ -85,6 +86,8 @@ namespace HypergraphProject
             }
             // End of counting sort.
 
+            Array.Reverse(edgeByColour);
+
             edges = new List<int>[hypertree.NoOfEdges];
             for (int i = 0; i < edges.Length; i++)
             {
@@ -140,6 +143,91 @@ namespace HypergraphProject
             // edges contains the list of tree-edges of each hyperedge,
             // colouring contains the colours of each hyperedge,
             // and edgeByColur has the edges ordered by their colour.
+        }
+
+        /// <summary>
+        /// Draws the hypertree as bitmap.
+        /// </summary>
+        /// <param name="size">
+        /// The default distance between two vertices.
+        /// </param>
+        public Bitmap DrawAsBitmap(float size)
+        {
+            Preprocess();
+
+            float radius = (float)data.Height[data.RootId];
+
+            float w = 2F * (radius + 0.5F) * size;
+            float h = 2F * (radius + 0.5F) * size;
+
+            Bitmap bmp = new Bitmap((int)w, (int)h);
+
+            Graphics g = Graphics.FromImage(bmp);
+            g.Clear(Color.White);
+
+            g.ScaleTransform(size, size);
+            g.TranslateTransform(radius + 0.5F, radius + 0.5F);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+            PointF[] points = new PointF[hypertree.NoOfVertices];
+
+            for (int vId = 0; vId < points.Length; vId++)
+            {
+                double x = Math.Cos(data.XShift[vId] * 2 * Math.PI / 360) * (double)data.Depth[vId];
+                double y = Math.Sin(data.XShift[vId] * 2 * Math.PI / 360) * (double)data.Depth[vId];
+
+                points[vId] = new PointF((float)x, (float)y);
+            }
+
+            float colScale = 1 / ((float)maxCol * 1.5F * 3F);
+
+            for (int i = 0; i < edgeByColour.Length; i++)
+            {
+                int eId = edgeByColour[i];
+                int eCol = colouring[eId];
+
+                List<int> treeEdges = edges[eId];
+                int[] vertices = hypertree.GetVertices(eId);
+
+                float borderRad = eCol * 1.5F * colScale;
+                float fillRad = eCol * 1.3F * colScale;
+
+                Pen borderPen = new Pen(Color.Black, borderRad * 1.0F);
+                Pen fillPen = new Pen(Color.White, fillRad * 1.0F);
+
+                foreach (int vId in vertices)
+                {
+                    g.FillEllipse(Brushes.Black, points[vId].X - borderRad, points[vId].Y - borderRad, 2F * borderRad, 2F * borderRad);
+                }
+
+                for (int j = 0; j < treeEdges.Count; j += 2)
+                {
+                    g.DrawLine(borderPen, points[treeEdges[j]], points[treeEdges[j + 1]]);
+                }
+
+                foreach (int vId in vertices)
+                {
+                    g.FillEllipse(Brushes.White, points[vId].X - fillRad, points[vId].Y - fillRad, 2F * fillRad, 2F * fillRad);
+                }
+
+                for (int j = 0; j < treeEdges.Count; j += 2)
+                {
+                    g.DrawLine(fillPen, points[treeEdges[j]], points[treeEdges[j + 1]]);
+                }
+            }
+
+            float verRadius = 0.5F * colScale;
+
+            for (int vId = 0; vId < points.Length; vId++)
+            {
+                g.FillEllipse(Brushes.Blue, points[vId].X - verRadius, points[vId].Y - verRadius, 2F * verRadius, 2F * verRadius);
+            }
+
+
+            g.Dispose();
+
+            return bmp;
+
         }
     }
 }
