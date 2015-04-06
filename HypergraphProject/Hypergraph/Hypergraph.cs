@@ -132,6 +132,8 @@ namespace HypergraphProject
             public int[] betaV;
             public bool? IsAcyclic;
 
+            private AcyclicityInfo() { }
+
             public AcyclicityInfo(int noOfVer, int noOfEdg)
             {
                 gamma = new int[noOfEdg];
@@ -143,6 +145,18 @@ namespace HypergraphProject
                     R[i] = -1;
                 }
             }
+
+            public AcyclicityInfo Clone()
+            {
+                AcyclicityInfo clone = new AcyclicityInfo();
+
+                clone.gamma = (int[])this.gamma.Clone();
+                clone.R = (int[])this.R.Clone();
+                clone.betaV = (int[])this.betaV.Clone();
+                clone.IsAcyclic = this.IsAcyclic;
+
+                return clone;
+            }
         }
 
         private AcyclicityInfo ai = null;
@@ -150,6 +164,8 @@ namespace HypergraphProject
 
         int[][] vertexList;
         int[][] edgeList;
+
+        private Hypergraph() { }
 
         /// <summary>
         /// Initilises an hypergraph from a given matrix.
@@ -283,6 +299,36 @@ namespace HypergraphProject
 
                 return ai.IsAcyclic.Value;
             }
+        }
+
+        public Hypergraph Clone()
+        {
+            Hypergraph clone  = new Hypergraph();
+
+            if (this.ai != null)
+            {
+                clone.ai = this.ai.Clone();
+            }
+
+            if (this.aiDual != null)
+            {
+                clone.aiDual = this.aiDual.Clone();
+            }
+
+            clone.vertexList = new int[this.vertexList.Length][];
+            for (int i = 0; i < this.vertexList.Length; i++)
+            {
+                clone.vertexList[i] = (int[])this.vertexList[i].Clone();
+            }
+
+            clone.edgeList = new int[this.edgeList.Length][];
+            for (int i = 0; i < this.edgeList.Length; i++)
+            {
+                clone.edgeList[i] = (int[])this.edgeList[i].Clone();
+            }
+
+            return clone;
+
         }
 
         /// <summary>
