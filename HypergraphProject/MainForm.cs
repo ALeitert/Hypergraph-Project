@@ -141,5 +141,24 @@ namespace HypergraphProject
             lblMaxCardinalityNumber.Text = maxCard.ToString();
         }
 
+        private void btnNew_Click(object sender, EventArgs e)
+        {
+            NewHypergraphDialog dlg = new NewHypergraphDialog();
+
+            if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                return;
+            }
+
+            matrixControl.ReadFromBitMatrix(
+                HypergraphGenerator.GenerateHypergraph(
+                    dlg.HypergraphType,
+                    dlg.Vertices,
+                    dlg.Edges,
+                    dlg.MaxCardinality
+                )
+            );
+        }
+
     }
 }
