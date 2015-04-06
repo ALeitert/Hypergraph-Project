@@ -14,7 +14,10 @@ namespace HypergraphProject
         RootedDrawing drawer;
         DrawingData data;
 
+        int maxCol = 0;
         int[] colouring;
+        int[] edgeByColour;
+
         List<int>[] edges;
 
         HypertreeDrawer(Hypergraph hTree)
@@ -49,15 +52,38 @@ namespace HypergraphProject
 
             // Computes colouring and max colour.
             colouring = hypertree.GetVertexColouring();
-            int maxCol = 0;
+            hypertree.TransformToDual();
 
+            maxCol = 0;
             for (int i = 0; i < colouring.Length; i++)
             {
                 maxCol = Math.Max(colouring[i], maxCol);
             }
 
-            hypertree.TransformToDual();
+            // Counting sort to sort edges by their colour.
+            edgeByColour = new int[colouring.Length];
+            int[] colCounter = new int[maxCol + 1];
 
+            for (int i = 0; i < colouring.Length; i++)
+            {
+                colCounter[colouring[i]]++;
+            }
+
+            for (int i = 1; i < colCounter.Length; i++)
+            {
+                colCounter[i] += colCounter[i - 1];
+            }
+
+            for (int i = colouring.Length - 1; i >= 0; i--)
+            {
+                int col = colouring[i];
+
+                colCounter[col]--;
+                int ind = colCounter[col];
+
+                edgeByColour[ind] = i;
+            }
+            // End of counting sort.
 
             edges = new List<int>[hypertree.NoOfEdges];
             for (int i = 0; i < edges.Length; i++)
@@ -100,7 +126,7 @@ namespace HypergraphProject
 
                     int[] neighs = joinForest[vId];
 
-                    foreach(int nId in neighs)
+                    foreach (int nId in neighs)
                     {
                         if (nId == pId) continue;
 
@@ -112,7 +138,8 @@ namespace HypergraphProject
 
             // Now, data contains the radial coordinates of each vertex,
             // edges contains the list of tree-edges of each hyperedge,
-            // and colouring contains the colours of each hyperedge.
+            // colouring contains the colours of each hyperedge,
+            // and edgeByColur has the edges ordered by their colour.
         }
     }
 }
