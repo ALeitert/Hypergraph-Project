@@ -179,7 +179,7 @@ namespace HypergraphProject
                 points[vId] = new PointF((float)x, (float)y);
             }
 
-            float colScale = 1 / ((float)maxCol * 1.5F * 3F);
+            float colScale = 1 / ((float)maxCol * 3F);
 
             for (int i = 0; i < edgeByColour.Length; i++)
             {
@@ -189,11 +189,13 @@ namespace HypergraphProject
                 List<int> treeEdges = edges[eId];
                 int[] vertices = hypertree.GetVertices(eId);
 
-                float borderRad = eCol * 1.5F * colScale;
-                float fillRad = eCol * 1.3F * colScale;
+                float borderWidth = 0.15F;
 
-                Pen borderPen = new Pen(Color.Black, borderRad * 1.0F);
-                Pen fillPen = new Pen(Color.White, fillRad * 1.0F);
+                float borderRad = eCol * colScale;
+                float fillRad = (eCol - borderWidth) * colScale;
+
+                Pen borderPen = new Pen(Color.Black, borderRad);
+                Pen fillPen = new Pen(Color.White, borderRad - 2 * borderWidth * colScale);
 
                 foreach (int vId in vertices)
                 {
