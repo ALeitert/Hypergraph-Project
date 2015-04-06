@@ -54,6 +54,7 @@
             this.mnuStopEditCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.btnDual = new System.Windows.Forms.ToolStripButton();
             this.btnDraw = new System.Windows.Forms.ToolStripButton();
+            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolMain.SuspendLayout();
             this.mnuMain.SuspendLayout();
             this.pnlMatrixContainer.SuspendLayout();
@@ -154,6 +155,8 @@
             // 
             // programToolStripMenuItem
             // 
+            this.programToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeToolStripMenuItem});
             this.programToolStripMenuItem.Name = "programToolStripMenuItem";
             this.programToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.programToolStripMenuItem.Text = "Program";
@@ -269,6 +272,13 @@
             this.btnDraw.Text = "Draw";
             this.btnDraw.Click += new System.EventHandler(this.btnDraw_Click);
             // 
+            // closeToolStripMenuItem
+            // 
+            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -319,6 +329,7 @@
         private System.Windows.Forms.SaveFileDialog dlgSaveMatrix;
         private System.Windows.Forms.ToolStripButton btnDraw;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
     }
 }
 
