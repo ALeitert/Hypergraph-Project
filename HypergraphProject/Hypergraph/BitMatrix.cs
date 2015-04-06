@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace HypergraphProject.Interface
+namespace HypergraphProject
 {
     public class BitMatrix
     {
