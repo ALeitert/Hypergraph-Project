@@ -109,7 +109,7 @@ namespace HypergraphProject
             edges = new List<int>[hypertree.NoOfEdges];
             for (int i = 0; i < edges.Length; i++)
             {
-                edges[i] = new List<int>(hypertree.GetCardinality(i) * 2 - 2);
+                edges[i] = new List<int>(Math.Max(hypertree.GetCardinality(i) * 2 - 2, 0));
             }
 
             // Use a DFS to determine the tree-edges of each hyperedge.
