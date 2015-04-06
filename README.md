@@ -20,5 +20,5 @@ The program is written in C# using Visual Studio 2013 Community Edition.
 The used .NET version is 3.5.
 
 ## Pictograms ##
-Pictograms based on pictograms by Daniel Bruce - CC BY-SA 4.0.
+Pictograms are based on pictograms by Daniel Bruce - CC BY-SA 4.0.
 See [entypo.com](http://www.entypo.com/).
