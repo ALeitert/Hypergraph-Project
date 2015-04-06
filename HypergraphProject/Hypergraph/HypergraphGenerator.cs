@@ -74,7 +74,7 @@ namespace HypergraphProject
                 verBuffer[i] = i;
             }
 
-            for (int i = 0; i < edges; i++)
+            for (int i = 0; i < edges && verBuSize > 0; i++)
             {
                 int rndInd = rng.Next(verBuSize);
                 int vId = verBuffer[rndInd];
