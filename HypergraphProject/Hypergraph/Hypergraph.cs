@@ -285,6 +285,22 @@ namespace HypergraphProject
             }
         }
 
+        public int NoOfVertices
+        {
+            get
+            {
+                return vertexList.Length;
+            }
+        }
+
+        public int NoOfEdges
+        {
+            get
+            {
+                return edgeList.Length;
+            }
+        }
+
         /// <summary>
         /// Determines if the hypergraph is alpha-acyclic.
         /// </summary>
@@ -299,6 +315,34 @@ namespace HypergraphProject
 
                 return ai.IsAcyclic.Value;
             }
+        }
+
+        public int GetDegree(int vId)
+        {
+            return vertexList[vId].Length;
+        }
+
+        public int GetCardinality(int eId)
+        {
+            return edgeList[eId].Length;
+        }
+
+        /// <summary>
+        /// Returns the edges containing the given vertex.
+        /// The metod creates a new array and copies the ids in this new array.
+        /// </summary>
+        public int[] GetEdges(int vId)
+        {
+            return (int[])vertexList[vId].Clone();
+        }
+
+        /// <summary>
+        /// Returns the vertices contained in the given edge.
+        /// The metod creates a new array and copies the ids in this new array.
+        /// </summary>
+        public int[] Getvertices(int eId)
+        {
+            return (int[])edgeList[eId].Clone();
         }
 
         public Hypergraph Clone()
