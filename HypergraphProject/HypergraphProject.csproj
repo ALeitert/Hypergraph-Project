@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drawing\DrawingData.cs" />
+    <Compile Include="Drawing\HypertreeDrawer.cs" />
     <Compile Include="Drawing\RootedDrawing.cs" />
     <Compile Include="Hypergraph\Hypergraph.cs" />
     <Compile Include="Hypergraph\HypergraphGenerator.cs" />
