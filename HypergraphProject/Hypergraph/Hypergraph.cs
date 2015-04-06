@@ -340,14 +340,14 @@ namespace HypergraphProject
         /// Returns the vertices contained in the given edge.
         /// The metod creates a new array and copies the ids in this new array.
         /// </summary>
-        public int[] Getvertices(int eId)
+        public int[] GetVertices(int eId)
         {
             return (int[])edgeList[eId].Clone();
         }
 
         public Hypergraph Clone()
         {
-            Hypergraph clone  = new Hypergraph();
+            Hypergraph clone = new Hypergraph();
 
             if (this.ai != null)
             {

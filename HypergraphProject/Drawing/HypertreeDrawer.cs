@@ -9,6 +9,24 @@ namespace HypergraphProject
     class HypertreeDrawer
     {
 
+        private static Color[] Colours = new Color[] 
+        {
+            Color.White,
+            Color.FromArgb(0x9B, 0xBB, 0x59),
+            Color.FromArgb(0x54, 0x8D, 0xD4),
+            Color.FromArgb(0xC0, 0x50, 0x4D),
+            Color.FromArgb(0x80, 0x64, 0xA2),
+            Color.FromArgb(0xF7, 0x96, 0x46),
+            Color.FromArgb(0x4B, 0xAC, 0xC6),
+
+            Color.FromArgb(0x76, 0x92, 0x3C),
+            Color.FromArgb(0x1F, 0x49, 0x7D),
+            Color.FromArgb(0x95, 0x37, 0x34),
+            Color.FromArgb(0x5F, 0x49, 0x7A),
+            Color.FromArgb(0xE3, 0x6C, 0x09),
+            Color.FromArgb(0x31, 0x85, 0x9B)
+        };
+
         private Hypergraph hypertree;
 
         DynamicForest joinForest;
@@ -189,17 +207,24 @@ namespace HypergraphProject
                 List<int> treeEdges = edges[eId];
                 int[] vertices = hypertree.GetVertices(eId);
 
-                float borderWidth = 0.15F;
+                float borderWidth = 0.12F;
 
                 float borderRad = eCol * colScale;
                 float fillRad = (eCol - borderWidth) * colScale;
 
-                Pen borderPen = new Pen(Color.Black, borderRad);
-                Pen fillPen = new Pen(Color.White, borderRad - 2 * borderWidth * colScale);
+                Color fillColor = eCol < Colours.Length ? Colours[eCol] : Colours[0];
+
+                float lineScale = 1.2F;
+
+                Pen borderPen = new Pen(Color.Black, borderRad * lineScale);
+                Pen fillPen = new Pen(fillColor, borderRad * lineScale - 2 * borderWidth * colScale);
+
+                Brush borderBrush = Brushes.Black;
+                Brush fillBrush = new SolidBrush(fillColor);
 
                 foreach (int vId in vertices)
                 {
-                    g.FillEllipse(Brushes.Black, points[vId].X - borderRad, points[vId].Y - borderRad, 2F * borderRad, 2F * borderRad);
+                    g.FillEllipse(borderBrush, points[vId].X - borderRad, points[vId].Y - borderRad, 2F * borderRad, 2F * borderRad);
                 }
 
                 for (int j = 0; j < treeEdges.Count; j += 2)
@@ -209,7 +234,7 @@ namespace HypergraphProject
 
                 foreach (int vId in vertices)
                 {
-                    g.FillEllipse(Brushes.White, points[vId].X - fillRad, points[vId].Y - fillRad, 2F * fillRad, 2F * fillRad);
+                    g.FillEllipse(fillBrush, points[vId].X - fillRad, points[vId].Y - fillRad, 2F * fillRad, 2F * fillRad);
                 }
 
                 for (int j = 0; j < treeEdges.Count; j += 2)
