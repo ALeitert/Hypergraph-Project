@@ -20,7 +20,7 @@ namespace HypergraphProject
             cboType.Items.Add(HypergraphType.Acyclic);
             cboType.Items.Add(HypergraphType.Hypertree);
 
-            cboType.SelectedItem = HypergraphType.Arbitrary;
+            cboType.SelectedItem = HypergraphType.Hypertree;
 
         }
 
