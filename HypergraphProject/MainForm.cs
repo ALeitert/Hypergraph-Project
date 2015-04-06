@@ -188,5 +188,11 @@ namespace HypergraphProject
 
         }
 
+        private void infoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            InfoForm frm = new InfoForm();
+            frm.ShowDialog(this);
+        }
+
     }
 }

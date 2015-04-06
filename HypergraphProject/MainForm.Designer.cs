@@ -29,17 +29,8 @@
         private void InitializeComponent()
         {
             this.toolMain = new System.Windows.Forms.ToolStrip();
-            this.btnNew = new System.Windows.Forms.ToolStripButton();
-            this.btnOpen = new System.Windows.Forms.ToolStripButton();
-            this.btnSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnStartEdit = new System.Windows.Forms.ToolStripButton();
-            this.btnStopEdit = new System.Windows.Forms.ToolStripDropDownButton();
-            this.mnuStopEditExecute = new System.Windows.Forms.ToolStripMenuItem();
-            this.mnuStopEditCancel = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnDual = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnDraw = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.lblVertexLabel = new System.Windows.Forms.ToolStripLabel();
             this.lblVertexNumber = new System.Windows.Forms.ToolStripLabel();
@@ -54,6 +45,15 @@
             this.pnlMatrixContainer = new System.Windows.Forms.Panel();
             this.dlgOpenMatrix = new System.Windows.Forms.OpenFileDialog();
             this.dlgSaveMatrix = new System.Windows.Forms.SaveFileDialog();
+            this.btnNew = new System.Windows.Forms.ToolStripButton();
+            this.btnOpen = new System.Windows.Forms.ToolStripButton();
+            this.btnSave = new System.Windows.Forms.ToolStripButton();
+            this.btnStartEdit = new System.Windows.Forms.ToolStripButton();
+            this.btnStopEdit = new System.Windows.Forms.ToolStripDropDownButton();
+            this.mnuStopEditExecute = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuStopEditCancel = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnDual = new System.Windows.Forms.ToolStripButton();
+            this.btnDraw = new System.Windows.Forms.ToolStripButton();
             this.toolMain.SuspendLayout();
             this.mnuMain.SuspendLayout();
             this.pnlMatrixContainer.SuspendLayout();
@@ -86,96 +86,15 @@
             this.toolMain.TabIndex = 0;
             this.toolMain.Text = "toolStrip1";
             // 
-            // btnNew
-            // 
-            this.btnNew.Image = global::HypergraphProject.Properties.Resources.Generate;
-            this.btnNew.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnNew.Name = "btnNew";
-            this.btnNew.Size = new System.Drawing.Size(57, 26);
-            this.btnNew.Text = "New";
-            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
-            // 
-            // btnOpen
-            // 
-            this.btnOpen.Image = global::HypergraphProject.Properties.Resources.Open;
-            this.btnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(62, 26);
-            this.btnOpen.Text = "Open";
-            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Image = global::HypergraphProject.Properties.Resources.Save;
-            this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(57, 26);
-            this.btnSave.Text = "Save";
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 29);
             // 
-            // btnStartEdit
-            // 
-            this.btnStartEdit.Image = global::HypergraphProject.Properties.Resources.Edit;
-            this.btnStartEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnStartEdit.Name = "btnStartEdit";
-            this.btnStartEdit.Size = new System.Drawing.Size(53, 26);
-            this.btnStartEdit.Text = "Edit";
-            this.btnStartEdit.Click += new System.EventHandler(this.btnStartEdit_Click);
-            // 
-            // btnStopEdit
-            // 
-            this.btnStopEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuStopEditExecute,
-            this.mnuStopEditCancel});
-            this.btnStopEdit.Image = global::HypergraphProject.Properties.Resources.EditActive;
-            this.btnStopEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnStopEdit.Name = "btnStopEdit";
-            this.btnStopEdit.ShowDropDownArrow = false;
-            this.btnStopEdit.Size = new System.Drawing.Size(53, 26);
-            this.btnStopEdit.Text = "Edit";
-            this.btnStopEdit.Visible = false;
-            // 
-            // mnuStopEditExecute
-            // 
-            this.mnuStopEditExecute.Name = "mnuStopEditExecute";
-            this.mnuStopEditExecute.Size = new System.Drawing.Size(114, 22);
-            this.mnuStopEditExecute.Text = "Execute";
-            this.mnuStopEditExecute.Click += new System.EventHandler(this.mnuStopEditExecute_Click);
-            // 
-            // mnuStopEditCancel
-            // 
-            this.mnuStopEditCancel.Name = "mnuStopEditCancel";
-            this.mnuStopEditCancel.Size = new System.Drawing.Size(114, 22);
-            this.mnuStopEditCancel.Text = "Cancel";
-            this.mnuStopEditCancel.Click += new System.EventHandler(this.mnuStopEditCancel_Click);
-            // 
-            // btnDual
-            // 
-            this.btnDual.Image = global::HypergraphProject.Properties.Resources.Dual;
-            this.btnDual.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnDual.Name = "btnDual";
-            this.btnDual.Size = new System.Drawing.Size(57, 26);
-            this.btnDual.Text = "Dual";
-            this.btnDual.Click += new System.EventHandler(this.btnDual_Click);
-            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 29);
-            // 
-            // btnDraw
-            // 
-            this.btnDraw.Image = global::HypergraphProject.Properties.Resources.Draw;
-            this.btnDraw.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnDraw.Name = "btnDraw";
-            this.btnDraw.Size = new System.Drawing.Size(60, 26);
-            this.btnDraw.Text = "Draw";
-            this.btnDraw.Click += new System.EventHandler(this.btnDraw_Click);
             // 
             // toolStripSeparator3
             // 
@@ -244,6 +163,7 @@
             this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
             this.infoToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.infoToolStripMenuItem.Text = "Info";
+            this.infoToolStripMenuItem.Click += new System.EventHandler(this.infoToolStripMenuItem_Click);
             // 
             // matrixControl
             // 
@@ -267,6 +187,87 @@
             this.pnlMatrixContainer.Name = "pnlMatrixContainer";
             this.pnlMatrixContainer.Size = new System.Drawing.Size(756, 428);
             this.pnlMatrixContainer.TabIndex = 3;
+            // 
+            // btnNew
+            // 
+            this.btnNew.Image = global::HypergraphProject.Properties.Resources.Generate;
+            this.btnNew.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnNew.Name = "btnNew";
+            this.btnNew.Size = new System.Drawing.Size(57, 26);
+            this.btnNew.Text = "New";
+            this.btnNew.Click += new System.EventHandler(this.btnNew_Click);
+            // 
+            // btnOpen
+            // 
+            this.btnOpen.Image = global::HypergraphProject.Properties.Resources.Open;
+            this.btnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnOpen.Name = "btnOpen";
+            this.btnOpen.Size = new System.Drawing.Size(62, 26);
+            this.btnOpen.Text = "Open";
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Image = global::HypergraphProject.Properties.Resources.Save;
+            this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(57, 26);
+            this.btnSave.Text = "Save";
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnStartEdit
+            // 
+            this.btnStartEdit.Image = global::HypergraphProject.Properties.Resources.Edit;
+            this.btnStartEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnStartEdit.Name = "btnStartEdit";
+            this.btnStartEdit.Size = new System.Drawing.Size(53, 26);
+            this.btnStartEdit.Text = "Edit";
+            this.btnStartEdit.Click += new System.EventHandler(this.btnStartEdit_Click);
+            // 
+            // btnStopEdit
+            // 
+            this.btnStopEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuStopEditExecute,
+            this.mnuStopEditCancel});
+            this.btnStopEdit.Image = global::HypergraphProject.Properties.Resources.EditActive;
+            this.btnStopEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnStopEdit.Name = "btnStopEdit";
+            this.btnStopEdit.ShowDropDownArrow = false;
+            this.btnStopEdit.Size = new System.Drawing.Size(53, 26);
+            this.btnStopEdit.Text = "Edit";
+            this.btnStopEdit.Visible = false;
+            // 
+            // mnuStopEditExecute
+            // 
+            this.mnuStopEditExecute.Name = "mnuStopEditExecute";
+            this.mnuStopEditExecute.Size = new System.Drawing.Size(114, 22);
+            this.mnuStopEditExecute.Text = "Execute";
+            this.mnuStopEditExecute.Click += new System.EventHandler(this.mnuStopEditExecute_Click);
+            // 
+            // mnuStopEditCancel
+            // 
+            this.mnuStopEditCancel.Name = "mnuStopEditCancel";
+            this.mnuStopEditCancel.Size = new System.Drawing.Size(114, 22);
+            this.mnuStopEditCancel.Text = "Cancel";
+            this.mnuStopEditCancel.Click += new System.EventHandler(this.mnuStopEditCancel_Click);
+            // 
+            // btnDual
+            // 
+            this.btnDual.Image = global::HypergraphProject.Properties.Resources.Dual;
+            this.btnDual.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDual.Name = "btnDual";
+            this.btnDual.Size = new System.Drawing.Size(57, 26);
+            this.btnDual.Text = "Dual";
+            this.btnDual.Click += new System.EventHandler(this.btnDual_Click);
+            // 
+            // btnDraw
+            // 
+            this.btnDraw.Image = global::HypergraphProject.Properties.Resources.Draw;
+            this.btnDraw.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDraw.Name = "btnDraw";
+            this.btnDraw.Size = new System.Drawing.Size(60, 26);
+            this.btnDraw.Text = "Draw";
+            this.btnDraw.Click += new System.EventHandler(this.btnDraw_Click);
             // 
             // MainForm
             // 

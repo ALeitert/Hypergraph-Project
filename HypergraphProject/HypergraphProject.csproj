@@ -49,6 +49,12 @@
     <Compile Include="Hypergraph\Hypergraph.cs" />
     <Compile Include="Hypergraph\HypergraphGenerator.cs" />
     <Compile Include="Drawing\DynamicForest.cs" />
+    <Compile Include="Interface\Forms\InfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interface\Forms\InfoForm.Designer.cs">
+      <DependentUpon>InfoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interface\Forms\NewHypergraphDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +92,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Interface\Forms\InfoForm.resx">
+      <DependentUpon>InfoForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Interface\Forms\NewHypergraphDialog.resx">
       <DependentUpon>NewHypergraphDialog.cs</DependentUpon>
     </EmbeddedResource>
