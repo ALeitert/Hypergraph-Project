@@ -122,23 +122,7 @@ namespace HypergraphProject
         {
             lblVertexNumber.Text = matrixControl.Dimension.Width.ToString();
             lblEdgesNumber.Text = matrixControl.Dimension.Height.ToString();
-
-            int maxCard = 0;
-            for (int y = 0; y < matrixControl.Dimension.Height; y++)
-            {
-                int card = 0;
-                for (int x = 0; x < matrixControl.Dimension.Width; x++)
-                {
-                    if (matrixControl[x, y])
-                    {
-                        card++;
-                    }
-                }
-
-                maxCard = Math.Max(maxCard, card);
-            }
-
-            lblMaxCardinalityNumber.Text = maxCard.ToString();
+            lblMaxCardinalityNumber.Text = matrixControl.Connections.ToString();
         }
 
         private void btnNew_Click(object sender, EventArgs e)

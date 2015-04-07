@@ -88,6 +88,17 @@ namespace HypergraphProject.Interface
             }
         }
 
+        /// <summary>
+        /// Returns the number of connections in the hypergraph, i.e. the number of ones in the matrix.
+        /// </summary>
+        public int Connections
+        {
+            get
+            {
+                return matrix.NoOfOnes;
+            }
+        }
+
         public Rectangle MatrixArea
         {
             get
@@ -881,7 +892,7 @@ namespace HypergraphProject.Interface
             sw.Close();
 
         }
-        
+
         /// <summary>
         /// Reads a matrix from a text file.
         /// </summary>
