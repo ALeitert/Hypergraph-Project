@@ -35,6 +35,7 @@ namespace HypergraphProject
 
         public int Width { get; protected set; }
         public int Height { get; protected set; }
+        public int NoOfOnes { get; protected set; }
 
         /// <summary>
         /// Returns or sets the value of a field.
@@ -59,7 +60,19 @@ namespace HypergraphProject
                 }
 
                 int index = GetCoordinateIndex(x, y, Width);
+
+                if (bits[index] == value) return;
+
                 bits[index] = value;
+
+                if (value)
+                {
+                    NoOfOnes++;
+                }
+                else
+                {
+                    NoOfOnes--;
+                }
             }
         }
 
@@ -77,6 +90,7 @@ namespace HypergraphProject
                 {
                     Width = this.Width,
                     Height = this.Height,
+                    NoOfOnes = this.NoOfOnes,
                     bits = (BitArray)this.bits.Clone(),
                     xFactor = this.xFactor,
                     yFactor = this.yFactor
