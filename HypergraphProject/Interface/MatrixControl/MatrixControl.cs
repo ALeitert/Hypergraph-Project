@@ -41,7 +41,8 @@ namespace HypergraphProject.Interface
         private List<EditStatus> rowEditStatus = null;
         private List<EditStatus> colEditStatus = null;
 
-        private static readonly string letters = "abcdefghijklmnopqrstuvwxyz";
+        private const string letters = "abcdefghijklmnopqrstuvwxyz";
+        private const string Separator = ":";
 
         public MatrixControl()
         {
@@ -860,6 +861,7 @@ namespace HypergraphProject.Interface
 
             sw.WriteLine(Dimension.Width.ToString());
             sw.WriteLine(Dimension.Height.ToString());
+            sw.WriteLine(Connections.ToString());
 
             for (int y = 0; y < Dimension.Height; y++)
             {
@@ -879,7 +881,7 @@ namespace HypergraphProject.Interface
                 }
 
                 sw.Write(edgeName);
-                sw.Write(" ");
+                sw.Write(Separator);
 
                 for (int x = 0; x < Dimension.Width; x++)
                 {
@@ -912,7 +914,7 @@ namespace HypergraphProject.Interface
             Size newDim = new Size(w, h);
             BitMatrix newMatrix = new BitMatrix(w, h);
 
-            Regex edgeRE = new Regex("(0|1){" + w.ToString() + "}");
+            Regex edgeRE = new Regex("(?<=" + Separator + ")(0|1){" + w.ToString() + "}");
             match = edgeRE.Match(fullText, match.Index + match.Length);
 
             for (int y = 0; y < h; y++)
